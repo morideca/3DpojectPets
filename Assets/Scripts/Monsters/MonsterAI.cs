@@ -52,7 +52,7 @@ public class MonsterAI : MonoBehaviour
         else inBattle = false;
         if (CameraManager.SceneType == SceneType.main)
         {
-            targetIsHuman = true;
+
         }
 
         animator = GetComponent<Animator>();
@@ -61,7 +61,7 @@ public class MonsterAI : MonoBehaviour
         healthManager = GetComponent<HealthManager>();
         meshAgent = GetComponent<NavMeshAgent>();
 
-        CameraManager.mainCharaterSwapped += ChangeTarget;
+        CameraManager.mainCharacterSwapped += ChangeTarget;
         CameraManager.playerIsMainCharacter += TargetIsHuman;
         CameraManager.playerIsNotMainCharacter += TargetIsNotHuman;
     }
@@ -69,14 +69,15 @@ public class MonsterAI : MonoBehaviour
 
     private void OnDisable()
     {
-        CameraManager.mainCharaterSwapped -= ChangeTarget;
+        CameraManager.mainCharacterSwapped -= ChangeTarget;
         CameraManager.playerIsMainCharacter -= TargetIsHuman;
         CameraManager.playerIsNotMainCharacter -= TargetIsNotHuman;
     }
 
     public void Update()
-    {if (!healthManager.IsDead)
-            distanceToTarget = Vector3.Distance(target.transform.position, transform.position);
+    {
+        distanceToTarget = Vector3.Distance(target.transform.position, transform.position);
+        if (!healthManager.IsDead)
         {
             if (!animating && target != null)
             {
@@ -87,11 +88,11 @@ public class MonsterAI : MonoBehaviour
                     {
                         CheckIfYouSeePlayer();
                     }
+                   else StopMove();
                 }
-                else tauntOn = true;
             }
 
-            if (!animating && tauntOn)
+            if (!animating && (tauntOn || inBattle))
             {
                 FollowTarget();
                 meshAgent.isStopped = false;
@@ -168,6 +169,12 @@ public class MonsterAI : MonoBehaviour
     private void TauntOn()
     {
         tauntOn = true;
+    }
+
+    private void StopMove()
+    {
+        tauntOn = false;
+        meshAgent.Stop();
     }
     
     private void AnimatingOn()

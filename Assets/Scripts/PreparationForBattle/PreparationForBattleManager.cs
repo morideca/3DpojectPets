@@ -48,6 +48,8 @@ public class PreparationForBattleManager : MonoBehaviour
 
     private GameObject targetGO;
 
+    private CameraManager cameraManager;
+
     [SerializeField]
     private CinemachineFreeLook virtualCamera;
     private Transform cameraTarget;
@@ -56,16 +58,21 @@ public class PreparationForBattleManager : MonoBehaviour
 
     void Start()
     {
+        cameraManager = GetComponent<CameraManager>();
+
         monsters = mostersInBattle.monstersID;
         pets = petsInBattle.monstersID;
+
         currentPetSlot = petSlot1;
         currentMonsterSlot = monsterSlot1;
         AddPetsAndMonsters();
 
         cameraTarget = allMonstersGO[currentIndex].transform;
 
-        virtualCamera.Follow = cameraTarget.Find("CameraTarget"); 
-        virtualCamera.LookAt = cameraTarget.Find("CameraTarget");
+        cameraManager.SwapCameraTargetMain(allMonstersGO[0]);
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
@@ -151,9 +158,7 @@ public class PreparationForBattleManager : MonoBehaviour
             currentIndex += 1;
             if (currentIndex > maxIndex) currentIndex = 0;
         }
-        cameraTarget = allMonstersGO[currentIndex].transform;
-        virtualCamera.Follow = cameraTarget.Find("CameraTarget");
-        virtualCamera.LookAt = cameraTarget.Find("CameraTarget");
+        cameraManager.SwapCameraTargetMain(allMonstersGO[currentIndex]);
     }
 
     private void SaveMonsterGO(GameObject monster)

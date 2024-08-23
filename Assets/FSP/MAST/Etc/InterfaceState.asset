@@ -17,7 +17,7 @@ MonoBehaviour:
   previousBuildToolIndex: -1
   selectedBuildToolIndex: -1
   selectedPrefabIndex: -1
-  prefabPath: Assets/Source
+  prefabPath: Assets/Source/modular_terrain_collection/WithCollider/Prefabs
   selectedPrefabPaletteFolderIndex: 0
   prefabPaletteColumnCount: 3
   previousPaintToolIndex: -1

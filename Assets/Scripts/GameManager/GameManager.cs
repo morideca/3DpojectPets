@@ -13,11 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject playerGO;
     [SerializeField]
-    private GameObject skeletonGO;
-    [SerializeField]
     private Transform playerSwapn;
-    [SerializeField]
-    private Transform skeletonSwapn;
     [SerializeField]
     private BattleMonstersData monstersForBattle;
     [SerializeField]
@@ -58,8 +54,6 @@ public class GameManager : MonoBehaviour
 
         player = Instantiate(playerGO, playerSwapn.position, Quaternion.identity);
         currentMainCharacter = player;
-
-        Instantiate(skeletonGO, skeletonSwapn.position, Quaternion.identity);
 
         cameraManager.ReturnCameraToPlayer(player, true);
 

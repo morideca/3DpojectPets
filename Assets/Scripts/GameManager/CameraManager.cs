@@ -13,7 +13,7 @@ public enum SceneType
 }
 public class CameraManager : MonoBehaviour
 {
-    public static event Action<GameObject> mainCharaterSwapped;
+    public static event Action<GameObject> mainCharacterSwapped;
     public static event Action playerIsMainCharacter;
     public static event Action playerIsNotMainCharacter;
 
@@ -37,7 +37,7 @@ public class CameraManager : MonoBehaviour
         switch (sceneType)
         {
             case SceneType.main:
-                mainCharaterSwapped?.Invoke(target);
+                mainCharacterSwapped?.Invoke(target);
                 playerIsNotMainCharacter?.Invoke();
 
                 CameraManager.cameraTarget = target;
@@ -45,12 +45,18 @@ public class CameraManager : MonoBehaviour
                 var cameraTarget = target.transform.Find("CameraTarget");
                 virtualCamera.Follow = cameraTarget;
                 virtualCamera.LookAt = cameraTarget;
-                
                 break;
+
             case SceneType.prepareForBattle:
+                CameraManager.cameraTarget = target;
+
+                cameraTarget = target.transform.Find("CameraTarget");
+                virtualCamera.Follow = cameraTarget;
+                virtualCamera.LookAt = cameraTarget;
                 break;
+
             case SceneType.battle:
-                mainCharaterSwapped?.Invoke(target);
+                mainCharacterSwapped?.Invoke(target);
 
                 CameraManager.cameraTarget = target;
 
@@ -64,7 +70,9 @@ public class CameraManager : MonoBehaviour
     public void ReturnCameraToPlayer(GameObject player, bool firstVoid)
     {
         if (!firstVoid) playerIsMainCharacter?.Invoke();
+        mainCharacterSwapped?.Invoke(player);
         cameraTarget = player;
+        Debug.Log(cameraTarget);
         virtualCamera.Follow = player.transform.Find("CameraTarget");
         virtualCamera.LookAt = player.transform.Find("CameraTarget");
     }

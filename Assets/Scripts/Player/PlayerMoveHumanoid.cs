@@ -30,17 +30,13 @@ public class PlayerMoveHumanoid : MonoBehaviour
 
     private void OnEnable()
     {
-        CameraManager.mainCharaterSwapped += StopOrStartMove;
-        AttackManager.attack += StopMove;
-        AttackManager.endAttack += StartMove;
+        CameraManager.mainCharacterSwapped += StopOrStartMove;
         HealthManager.petDied += StopMove;
     }
 
     private void OnDisable()
     {
-        CameraManager.mainCharaterSwapped -= StopOrStartMove;
-        AttackManager.attack -= StopMove;
-        AttackManager.endAttack -= StartMove;
+        CameraManager.mainCharacterSwapped -= StopOrStartMove;
         HealthManager.petDied -= StopMove;
     }
 

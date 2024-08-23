@@ -49,12 +49,12 @@ public class PlayerThrowBall : MonoBehaviour
 
     private void OnEnable()
     {
-        CameraManager.mainCharaterSwapped += EnableOrDisableCanThrow;
+        CameraManager.mainCharacterSwapped += EnableOrDisableCanThrow;
     }
 
     private void OnDisable()
     {
-        CameraManager.mainCharaterSwapped -= EnableOrDisableCanThrow;
+        CameraManager.mainCharacterSwapped -= EnableOrDisableCanThrow;
     }
 
     private void Start()
