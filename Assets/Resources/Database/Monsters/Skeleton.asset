@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae2a87ac874a31947a9d9972e002e2d0, type: 3}
+  m_Name: Skeleton
+  m_EditorClassIdentifier: 
+  name: Skeleton
+  id: 1
+  icon: {fileID: 21300000, guid: 3724f2cc746b2b140be1279643cda37d, type: 3}
+  description: This is a skeleton
+  goEnemy: {fileID: 2948919142752297658, guid: 5b176b920545bec4984c45b32cc7af53, type: 3}
+  goPet: {fileID: 8932495650570871541, guid: 1ebed4ac2f467674a9159ed9f2b64f96, type: 3}
+  previewGO: {fileID: 2948919142752297658, guid: 7faccdf2b2e49854cbdb1b0f89c3b48b, type: 3}
+  monsterType: 0
