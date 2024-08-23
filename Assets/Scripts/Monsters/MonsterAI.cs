@@ -34,7 +34,7 @@ public class MonsterAI : MonoBehaviour
    
 
     private bool tauntOn = false;
-    private bool targetIsHuman = false;
+    private bool targetIsHuman = true;
     private bool animating;
 
     private bool inBattle;
@@ -44,8 +44,16 @@ public class MonsterAI : MonoBehaviour
 
     void Start()
     {
-        if (CameraManager.SceneType == SceneType.battle) inBattle = true;
+        if (CameraManager.SceneType == SceneType.battle)
+        {
+            inBattle = true;
+            targetIsHuman = false;
+        }
         else inBattle = false;
+        if (CameraManager.SceneType == SceneType.main)
+        {
+            targetIsHuman = true;
+        }
 
         animator = GetComponent<Animator>();
         target = CameraManager.cameraTarget;

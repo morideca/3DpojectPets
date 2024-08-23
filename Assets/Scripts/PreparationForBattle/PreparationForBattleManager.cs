@@ -152,7 +152,6 @@ public class PreparationForBattleManager : MonoBehaviour
             if (currentIndex > maxIndex) currentIndex = 0;
         }
         cameraTarget = allMonstersGO[currentIndex].transform;
-        Debug.Log(cameraTarget);
         virtualCamera.Follow = cameraTarget.Find("CameraTarget");
         virtualCamera.LookAt = cameraTarget.Find("CameraTarget");
     }

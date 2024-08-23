@@ -63,6 +63,8 @@ public class BattleManager : MonoBehaviour
         AddPetsAndMonsters();
 
         cameraManager.SwapCameraTargetMain(allMonstersGO[0]);
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()

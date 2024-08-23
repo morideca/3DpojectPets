@@ -26,6 +26,8 @@ public abstract class AttackManager : MonoBehaviour
     private bool simpleAttackOnCooldown;
     private bool powerAttackOnCooldown;
 
+    private bool isAttacking;
+
 
     void Start()
     {
@@ -37,19 +39,26 @@ public abstract class AttackManager : MonoBehaviour
     {
         if (playerMoveHumanoid.IsGrounded == true)
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0) && !simpleAttackOnCooldown)
+            if (Input.GetKeyDown(KeyCode.Mouse0) && !simpleAttackOnCooldown && !isAttacking)
             {
                 SimpleAttack();
                 simpleAttackOnCooldown = true;
                 Invoke("SimpleAttackCooldownOff", simpleAttackCooldownTime);
+                isAttacking = true;
             }
-            if (Input.GetKeyDown(KeyCode.Mouse1) && !powerAttackOnCooldown)
+            if (Input.GetKeyDown(KeyCode.Mouse1) && !powerAttackOnCooldown && !isAttacking)
             {
                 PowerAttack();
                 powerAttackOnCooldown = true;
                 Invoke("PowerAttackCooldownOff", powerAttackCooldownTime);
+                isAttacking = true;
             }
         }
+    }
+
+    private void IsAttackingOff()
+    {
+        isAttacking = false;
     }
 
     private void SimpleAttackCooldownOff()

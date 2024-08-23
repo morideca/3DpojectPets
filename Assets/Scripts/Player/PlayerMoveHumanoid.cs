@@ -54,13 +54,13 @@ public class PlayerMoveHumanoid : MonoBehaviour
 
     public void StopMove()
     {
-        if (this.gameObject == GameManager.CurrentMainCharacter)
+        if (this.gameObject == CameraManager.cameraTarget)
         canMove = false;
     }
 
     public void StartMove()
     {
-        if (this.gameObject == GameManager.CurrentMainCharacter)
+        if (this.gameObject == CameraManager.cameraTarget)
         canMove = true;
     }
 
