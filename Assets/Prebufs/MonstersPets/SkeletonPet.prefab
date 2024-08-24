@@ -2568,6 +2568,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   simpleAttackPoint: {fileID: 2577366323720217632}
+  attack1: 5
+  attack2: 5
+  attack1CooldownTime: 3
+  attack2CooldownTime: 5
 --- !u!114 &8782802285037497879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2593,6 +2597,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runSpeed: 6
+  walkSpeed: 4
+  allowJump: 1
+  allowRun: 1
+  allowWalk: 1
 --- !u!143 &644041904422115628
 CharacterController:
   m_ObjectHideFlags: 0

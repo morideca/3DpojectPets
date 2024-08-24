@@ -77,6 +77,7 @@ public class GameManager : MonoBehaviour
 
     private void ReturnCameraToPlayer()
     {
+        if (currentMainCharacter != player) Destroy(currentMainCharacter.gameObject);
         currentMainCharacter = player;
         cameraManager.ReturnCameraToPlayer(player, false);
     }

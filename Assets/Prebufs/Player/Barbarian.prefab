@@ -1088,6 +1088,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runSpeed: 6
+  allowJump: 1
+  allowRun: 1
+  allowWalk: 1
 --- !u!114 &6912310472320399496
 MonoBehaviour:
   m_ObjectHideFlags: 0
