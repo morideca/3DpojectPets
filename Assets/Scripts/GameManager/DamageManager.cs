@@ -6,18 +6,19 @@ public class DamageManager : MonoBehaviour
 {
     private void OnEnable()
     {
-        AttackManager.hittedTarget += DealDamage;
+        AttackManager.hitTarget += DealDamage;
         MonsterAI.monsterAttackedPet += DealDamage;
     }
 
     private void OnDisable()
     {
-        AttackManager.hittedTarget -= DealDamage;
+        AttackManager.hitTarget -= DealDamage;
         MonsterAI.monsterAttackedPet -= DealDamage;
     }
 
     private void DealDamage(GameObject target, int amount)
     {
-        target.GetComponent<HealthManager>().GetDamage(amount);
+        target.TryGetComponent<HealthManager>(out var _target);
+        if (_target != null) target.GetComponent<HealthManager>().GetDamage(amount);
     }
 }

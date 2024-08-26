@@ -51,8 +51,6 @@ public class BattleManager : MonoBehaviour
     private static GameObject currentMainCharacter;
     public static GameObject CurrentMainCharacter => currentMainCharacter;
 
-    private int currentIndex = 0;
-
     void Start()
     {
         cameraManager = GetComponent<CameraManager>();

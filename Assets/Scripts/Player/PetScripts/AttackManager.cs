@@ -7,31 +7,31 @@ using UnityEngine;
 
 public abstract class AttackManager : MonoBehaviour
 {
-    public static event Action<GameObject, int> hittedTarget;
+    public static event Action<GameObject, int> hitTarget;
 
-    private Animator animator;
-
-    [SerializeField]
-    private Transform simpleAttackPoint;
-
-    private PlayerMoveHumanoid playerMoveHumanoid;
+    protected Animator animator;
 
     [SerializeField]
-    protected int attack1;
-    [SerializeField]
-    protected int attack2;
-    [SerializeField]
-    private float attack1CooldownTime = 3;
-    [SerializeField]
-    private float attack2CooldownTime = 5;
-    private bool attack1OnCooldown = false;
-    private bool Attack2OnCooldown;
+    protected Transform simpleAttackPoint;
 
-    private bool isAttacking = false;
-    private bool canAttack = true;
+    protected PlayerMoveHumanoid playerMoveHumanoid;
+
+    [SerializeField]
+    protected int attack1Damage;
+    [SerializeField]
+    protected int attack2Damage;
+    [SerializeField]
+    protected float attack1CooldownTime = 3;
+    [SerializeField]
+    protected float attack2CooldownTime = 5;
+    protected bool attack1OnCooldown = false;
+    protected bool Attack2OnCooldown;
+
+    protected bool isAttacking = false;
+    protected bool canAttack = true;
 
 
-    void Start()
+    public virtual void Start()
     {
         animator = GetComponent<Animator>();
         TryGetComponent<PlayerMoveHumanoid>(out var playerMoveHumanoid);
@@ -48,18 +48,10 @@ public abstract class AttackManager : MonoBehaviour
         CameraManager.mainCharacterSwapped -= CheckForNewCameraTarget;
     }
 
-    private void CheckForNewCameraTarget(GameObject target)
-    {
-        if (target == gameObject) canAttack = true;
-        else canAttack = false;
-    }
 
-    void Update()
+
+    virtual public void Update()
     {
-        Debug.Log(canAttack);
-        Debug.Log(isAttacking);
-        Debug.Log(attack1OnCooldown);
-        Debug.Log(playerMoveHumanoid.IsGrounded);
         if (canAttack && playerMoveHumanoid.IsGrounded == true)
         {
                 Attack1();
@@ -68,50 +60,58 @@ public abstract class AttackManager : MonoBehaviour
         }
     }
 
+    private void CheckForNewCameraTarget(GameObject target)
+    {
+        if (target == gameObject) canAttack = true;
+        else canAttack = false;
+    }
+
     private void IsAttackingOff()
     {
         isAttacking = false;
     }
 
-    private void attack1OnCooldownOff() => attack1OnCooldown = false;
+    private void Attack1OnCooldownOff() => attack1OnCooldown = false;
 
 
-    private void attack2CooldownOff() => Attack2OnCooldown = false;
+    private void Attack2CooldownOff() => Attack2OnCooldown = false;
 
 
 
-    private void dealSimpleDamage()
+    private void DealSimpleDamage()
     {
-        dealDamage(attack1);
+        DealDamage(attack1Damage);
     }
 
-    private void dealPowerDamage()
+    private void DealPowerDamage()
     {
-        dealDamage(attack2);
+        DealDamage(attack2Damage);
     }
 
-    public virtual void dealDamage(int damage)
+    public void DealDamage(int damage)
     {
         var colliders = Physics.OverlapSphere(simpleAttackPoint.position, 0.5f);
         foreach (var collider in colliders)
         {
             if (collider.gameObject.GetComponent<IDamageable>() != null && collider.gameObject.CompareTag("Monster"))
             {
-                hittedTarget?.Invoke(collider.gameObject, damage);
-                Debug.Log(collider.gameObject);
+                hitTarget?.Invoke(collider.gameObject, damage);
             }
         }
     }
 
+    public void DealDamage(int damage, GameObject target)
+    {
+        hitTarget?.Invoke(target, damage);
+    }
+
     virtual public void Attack1()
     {
-        Debug.Log("attack");
         if (Input.GetKeyDown(KeyCode.Mouse0) && !attack1OnCooldown && !isAttacking)
         {
-            Debug.Log("attack");
             animator.SetTrigger("attack1");
             attack1OnCooldown = true;
-            Invoke("attack1OnCooldownOff", attack1CooldownTime);
+            Invoke("Attack1OnCooldownOff", attack1CooldownTime);
             isAttacking = true;
         }
     }
@@ -120,10 +120,9 @@ public abstract class AttackManager : MonoBehaviour
     {
     if (Input.GetKeyDown(KeyCode.Mouse1) && !Attack2OnCooldown && !isAttacking)
     {
-            Debug.Log("attack");
             animator.SetTrigger("attack2");
         Attack2OnCooldown = true;
-        Invoke("attack2CooldownOff", attack2CooldownTime);
+        Invoke("Attack2CooldownOff", attack2CooldownTime);
         isAttacking = true;
     }
     }

@@ -18,12 +18,9 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log(other);
         if (other.gameObject.TryGetComponent(out BaseHumanoid monster))
         {
-            Debug.Log(monster);
             id = monster.ID;
-            Debug.Log("Поймал монстра с айди" + id);
             Destroy(monster.gameObject);
 
             Material material = meshRenderer.material;

@@ -24,8 +24,8 @@ public class PlayerThrowBall : MonoBehaviour
     [SerializeField]
     private float ballForce;
     [SerializeField]
-    Transform pointForLaunch;
-    GameObject mainCamera;
+    private Transform pointForLaunch;
+    private GameObject mainCamera;
     [SerializeField]
     private CinemachineFreeLook virtualCamera;
 

@@ -30,6 +30,7 @@ public class HPBarManager : MonoBehaviour
         healthManager = GetComponent<HealthManager>();
         int maxHealth = healthManager.MaxHealth;
         SetMaxValue(maxHealth);
+        ChangeValue(maxHealth);
         healthManager.wasDamaged += ChangeValue;
     }
 

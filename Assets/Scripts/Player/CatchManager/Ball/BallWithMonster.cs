@@ -7,6 +7,7 @@ public class BallWithMonster : MonoBehaviour
 {
     private GameObject monster;
     private Rigidbody rb;
+    private bool summoned = false;
 
     public static event Action<GameObject> petSummoned;
 
@@ -22,10 +23,11 @@ public class BallWithMonster : MonoBehaviour
 
     private void Update()
     {
-        if (rb.velocity.magnitude <= 0.5)
+        if (rb.velocity.magnitude <= 0.5 && summoned == false)
         {
-            var _monster = Instantiate(monster, transform.position, Quaternion.identity);
-            petSummoned?.Invoke(_monster);
+            summoned = true;
+            var monster = Instantiate(this.monster, transform.position, Quaternion.identity);
+            petSummoned?.Invoke(monster);
             Destroy(gameObject);
         }
     }

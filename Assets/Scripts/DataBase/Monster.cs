@@ -6,7 +6,8 @@ public enum MonsterTypes
 {
     skeleton,
     skeletonMage,
-    skeletonWarrior
+    skeletonWarrior,
+    golem   
 }
 
 [CreateAssetMenu(fileName = "Monster", menuName = "Game/Mosterdata")]

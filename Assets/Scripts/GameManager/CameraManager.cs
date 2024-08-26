@@ -37,10 +37,11 @@ public class CameraManager : MonoBehaviour
         switch (sceneType)
         {
             case SceneType.main:
-                mainCharacterSwapped?.Invoke(target);
-                playerIsNotMainCharacter?.Invoke();
 
                 CameraManager.cameraTarget = target;
+
+                mainCharacterSwapped?.Invoke(target);
+                playerIsNotMainCharacter?.Invoke();
 
                 var cameraTarget = target.transform.Find("CameraTarget");
                 virtualCamera.Follow = cameraTarget;
@@ -72,7 +73,6 @@ public class CameraManager : MonoBehaviour
         if (!firstVoid) playerIsMainCharacter?.Invoke();
         mainCharacterSwapped?.Invoke(player);
         cameraTarget = player;
-        Debug.Log(cameraTarget);
         virtualCamera.Follow = player.transform.Find("CameraTarget");
         virtualCamera.LookAt = player.transform.Find("CameraTarget");
     }
