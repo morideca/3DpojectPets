@@ -42,11 +42,12 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private BattleMonstersData petsInBattle;
 
+    [SerializeField]
+    private GameObject playerGO;
+
     private GameObject targetGO;
 
     private CameraManager cameraManager;
-
-    private Transform cameraTarget;
 
     private static GameObject currentMainCharacter;
     public static GameObject CurrentMainCharacter => currentMainCharacter;
@@ -59,7 +60,6 @@ public class BattleManager : MonoBehaviour
         currentPetSlot = petSlot1;
         currentMonsterSlot = monsterSlot1;
         AddPetsAndMonsters();
-
         cameraManager.SwapCameraTargetMain(allMonstersGO[0]);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -67,31 +67,29 @@ public class BattleManager : MonoBehaviour
 
     private void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            cameraManager.ReturnCameraToPlayer(playerGO, false);
+        }
     }
 
     private void AddPetsAndMonsters()
     {
-        for (int i = 0; i < pets.Count; i++)
+
+        foreach (var monster in monsterDatabase.Monsters)
         {
-            if (pets[i] > 0)
+            if (monsters[0] == monster.Id)
             {
-                foreach (var monster in monsterDatabase.Monsters)
-                {
-                    if (monsters[i] == monster.Id)
-                    {
-                        targetGO = monster.GOPet;
-                    }
-                }
-                Vector3 directionToLook = targetLook.position - currentPetSlot.position;
-                directionToLook.y = 0;
-                Quaternion rotationToLook = Quaternion.LookRotation(directionToLook);
-                var go = Instantiate(targetGO, currentPetSlot.position, rotationToLook);
-                allMonstersGO.Add(go);
-                if (i > 0) go.SetActive(false);
-                ChooseMonsterSlot(i);
+                targetGO = monster.GOPet;
             }
         }
+        Vector3 directionToLook = targetLook.position - currentPetSlot.position;
+        directionToLook.y = 0;
+        Quaternion rotationToLook = Quaternion.LookRotation(directionToLook);
+        var go = Instantiate(targetGO, currentPetSlot.position, rotationToLook);
+        allMonstersGO.Add(go);
+        ChooseMonsterSlot(0);
+
 
         for (int i = 0; i < monsters.Count; i++)
         {
@@ -104,14 +102,14 @@ public class BattleManager : MonoBehaviour
                         targetGO = monster.GOEnemy;
                     }
                 }
-                Vector3 directionToLook = targetLook.position - currentMonsterSlot.position;
-                directionToLook.y = 0;
-                Quaternion rotationToLook = Quaternion.LookRotation(directionToLook);
-                var go = Instantiate(targetGO, currentMonsterSlot.position, rotationToLook);
-                allMonstersGO.Add(go);
-                if (i > 4) go.SetActive(false);
-                ChooseMonsterSlot(i + 1);
             }
+            directionToLook = targetLook.position - currentMonsterSlot.position;
+            directionToLook.y = 0;
+            rotationToLook = Quaternion.LookRotation(directionToLook);
+            go = Instantiate(targetGO, currentMonsterSlot.position, rotationToLook);
+            allMonstersGO.Add(go);
+            if (i > 4) go.SetActive(false);
+            ChooseMonsterSlot(i + 1);
         }
     }
 

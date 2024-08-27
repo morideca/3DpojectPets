@@ -41,7 +41,7 @@ public class GolemManager : AttackManager
     {
         if (canAttack && playerMoveHumanoid.IsGrounded == true)
         {
-            if (!throwRockOnCooldown)
+            if (!isAttacking && !throwRockOnCooldown)
             {
                 if (Input.GetKeyDown(KeyCode.Mouse0))
                 {
@@ -59,14 +59,14 @@ public class GolemManager : AttackManager
                 {
                     playerMoveHumanoid.UnFreezeThrowRotation();
                     animator.SetTrigger("attack1");
+                    isAttacking = true;
                     lineRenderer.enabled = false;
                     showTrajectory = false;
                 }
-
-                if (rockGO != null && rockGrabbed)
-                {
-                    GrabRock();
-                }
+            }
+            if (rockGO != null && rockGrabbed)
+            {
+                GrabRock();
             }
             Attack2();
         }

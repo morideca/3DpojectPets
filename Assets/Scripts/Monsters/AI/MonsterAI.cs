@@ -40,6 +40,10 @@ public abstract class MonsterAI : MonoBehaviour
     protected bool animating;
     protected bool inBattle;
 
+    private Vector3 pointWhereStartedAgr;
+
+    private bool goingToStartPosition = false;
+
     public bool IsTaunted => tauntOn;
 
     public virtual void Start()
@@ -61,9 +65,15 @@ public abstract class MonsterAI : MonoBehaviour
         healthManager = GetComponent<HealthManager>();
         meshAgent = GetComponent<NavMeshAgent>();
 
+
         CameraManager.mainCharacterSwapped += ChangeTarget;
         CameraManager.playerIsMainCharacter += TargetIsHuman;
         CameraManager.playerIsNotMainCharacter += TargetIsNotHuman;
+    }
+
+    private void OnEnable()
+    {
+        pointWhereStartedAgr = transform.position;
     }
 
     public virtual void OnDisable()
@@ -75,40 +85,61 @@ public abstract class MonsterAI : MonoBehaviour
 
     public virtual void Update()
     {
-        distanceToTarget = Vector3.Distance(target.transform.position, transform.position);
-        if (!healthManager.IsDead)
+
+        if (goingToStartPosition && Vector3.Distance(pointWhereStartedAgr, transform.position) <= 0.5)
         {
-            if (!animating && target != null)
+            pointWhereStartedAgr = transform.position;
+            goingToStartPosition = false;
+        }
+
+
+        if (!goingToStartPosition)
+        {
+            distanceToTarget = Vector3.Distance(target.transform.position, transform.position);
+            if (!healthManager.IsDead)
             {
-                if (!inBattle)
+                if (!animating && target != null)
                 {
-                    distanceToTarget = Vector3.Distance(target.transform.position, transform.position);
-                    if (distanceToTarget <= tauntRange)
+                    if (!inBattle)
                     {
-                        CheckIfYouSeePlayer();
+                        distanceToTarget = Vector3.Distance(target.transform.position, transform.position);
+                        if (distanceToTarget <= tauntRange)
+                        {
+                            CheckIfYouSeePlayer();
+                        }
+                        else 
+                        {
+                            StopMove();
+                            if (Vector3.Distance(pointWhereStartedAgr, transform.position) > 0.5f)
+                            {
+                                goingToStartPosition = true;
+                                GoToPoint(pointWhereStartedAgr);
+                            }
+                        }
                     }
-                   else StopMove();
                 }
-            }
+                if (!goingToStartPosition)
+                {
+                    if (!animating && (tauntOn || inBattle))
+                    {
+                        FollowTarget();
+                        meshAgent.isStopped = false;
+                    }
+                    else
+                    {
+                        meshAgent.isStopped = true;
+                        animator.SetBool("running", false);
+                    }
 
-            if (!animating && (tauntOn || inBattle))
-            {
-                FollowTarget();
-                meshAgent.isStopped = false;
-            }
-            else
-            {
-                meshAgent.isStopped = true;
-                animator.SetBool("running", false);
-            }
-
-            if (targetIsHuman && distanceToTarget <= 3 && !animating)
-            {
-                MonsterToutchedPlayer();
-            }
-            else if (distanceToTarget <= attackRange && !animating)
-            {
-                Attack();
+                    if (targetIsHuman && distanceToTarget <= 3 && !animating)
+                    {
+                        MonsterToutchedPlayer();
+                    }
+                    else if (distanceToTarget <= attackRange && !animating)
+                    {
+                        Attack();
+                    }
+                }
             }
         }
     }
@@ -172,6 +203,12 @@ public abstract class MonsterAI : MonoBehaviour
                 TauntOn();
             }
         }
+    }
+
+    public void GoToPoint(Vector3 point)
+    {
+        if (meshAgent.isStopped == true) meshAgent.isStopped = false;
+        meshAgent.destination = point;
     }
 
     public void TauntOn()

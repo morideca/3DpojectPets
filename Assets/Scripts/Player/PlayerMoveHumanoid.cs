@@ -5,36 +5,36 @@ using UnityEngine;
 
 public class PlayerMoveHumanoid : MonoBehaviour
 {
-    private CharacterController controller;
+    protected CharacterController controller;
 
-    private Animator animator;
+    protected Animator animator;
 
-    private Transform mainCamera;
-
-    [SerializeField]
-    private float runSpeed = 6;
-    [SerializeField]
-    private float walkSpeed;
-
-    private float force;
-    private float smoothTime = 0.1f;
-    private float smoothVelocity;
-
-    private float yVelocity;
-    private float jumpTime = 1;
-    private float gravity = 9.8f;
-    private float jumpForce;
-
-    private bool canMove = true;
-    private bool isJumping = false;
-    private bool freezeThrowRotation = false;
+    protected Transform mainCamera;
 
     [SerializeField]
-    private bool allowJump;
+    protected float runSpeed = 6;
     [SerializeField]
-    private bool allowRun;
+    protected float walkSpeed;
+
+    protected float force;
+    protected float smoothTime = 0.1f;
+    protected float smoothVelocity;
+
+    protected float yVelocity;
+    protected float jumpTime = 1;
+    protected float gravity = 9.8f;
+    protected float jumpForce;
+
+    protected bool canMove = true;
+    protected bool isJumping = false;
+    protected bool freezeThrowRotation = false;
+
     [SerializeField]
-    private bool allowWalk;
+    protected bool allowJump;
+    [SerializeField]
+    protected bool allowRun;
+    [SerializeField]
+    protected bool allowWalk;
 
     public bool IsGrounded => controller.isGrounded;
 
@@ -50,7 +50,7 @@ public class PlayerMoveHumanoid : MonoBehaviour
         HealthManager.petDied -= StopMove;
     }
 
-    private void Start()
+    public void Start()
     {
         animator = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
@@ -59,7 +59,7 @@ public class PlayerMoveHumanoid : MonoBehaviour
         force = walkSpeed;
     }
 
-    private void Update()
+    public void Update()
     {
         if (canMove)
         {

@@ -52,7 +52,6 @@ public class GolemAI : MonsterAI
 
     private void DealExplosionDamage(List<GameObject> targets)
     {
-
         foreach (GameObject target in targets)
         {
             Debug.Log("dealDamage" + target);
@@ -61,8 +60,6 @@ public class GolemAI : MonsterAI
                 DealDamage(rockDamage, target);
             }
         }
-
-        DealDamage();
     }
 
     private void GrabRock()

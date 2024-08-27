@@ -108,7 +108,7 @@ public class PreparationForBattleManager : MonoBehaviour
             {
                 foreach (var monster in monsterDatabase.Monsters)
                 {
-                    if (monsters[i] == monster.Id)
+                    if (pets[i] == monster.Id)
                     {
                         targetGO = monster.PreviewGO;
                     }
@@ -119,7 +119,7 @@ public class PreparationForBattleManager : MonoBehaviour
                 var go = Instantiate(targetGO, currentPetSlot.position, rotationToLook);
                 allMonstersGO.Add(go);
                 SavePetGO(go);
-                ChooseMonsterSlot(i);
+                ChoosePetSlot(i);
             }
         }
 
@@ -140,7 +140,7 @@ public class PreparationForBattleManager : MonoBehaviour
                 var go = Instantiate(targetGO, currentMonsterSlot.position, rotationToLook);
                 allMonstersGO.Add(go);
                 SaveMonsterGO(go);
-                ChooseMonsterSlot(i + 1);
+                ChooseMonsterSlot(i);
             }
         }
     }
@@ -194,7 +194,7 @@ public class PreparationForBattleManager : MonoBehaviour
 
     private void ChooseMonsterSlot(int index)
     {
-        
+        index += 1;
         switch (index)
         {
             case 0:

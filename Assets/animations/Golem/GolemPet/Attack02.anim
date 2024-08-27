@@ -87576,14 +87576,14 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 2
-    functionName: IsAttackingOff
+    functionName: StartMove
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 2
-    functionName: StartMove
+    functionName: IsAttackingOff
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

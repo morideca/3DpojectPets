@@ -608,6 +608,9 @@ PrefabInstance:
       addedObject: {fileID: 4139168156031102571}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b7aaeb8acf4ab6e439127e4f0c462e85, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 8922995076398555754}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b7aaeb8acf4ab6e439127e4f0c462e85, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 2984750941797308123}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b7aaeb8acf4ab6e439127e4f0c462e85, type: 3}
       insertIndex: -1
@@ -619,6 +622,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7672446332475100125}
   m_SourcePrefab: {fileID: 100100000, guid: b7aaeb8acf4ab6e439127e4f0c462e85, type: 3}
+--- !u!4 &1152998637765637683 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -5463563846300784168, guid: b7aaeb8acf4ab6e439127e4f0c462e85, type: 3}
+  m_PrefabInstance: {fileID: 2606954747983601643}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2569157328975296512 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b7aaeb8acf4ab6e439127e4f0c462e85, type: 3}
@@ -672,6 +680,24 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8922995076398555754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2948919142752297658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 869b611f42678374da0640e7e194605f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointForRay: {fileID: 1152998637765637683}
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 72
+  tauntRange: 15
+  attackRange: 1.5
 --- !u!114 &2984750941797308123
 MonoBehaviour:
   m_ObjectHideFlags: 0

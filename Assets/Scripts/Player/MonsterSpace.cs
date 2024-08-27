@@ -1,31 +1,35 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Profiling.Memory.Experimental;
 
 public class MonsterSpace : MonoBehaviour
 {
-    private List<Monster> availableMonsters = new List<Monster>();
+    [SerializeField]
+    private BattleMonstersData petsInSpaceData;
 
     public static event Action<Monster> setFirstSlot;
     public static event Action<Monster> setSecondSlot;
     public static event Action<Monster> setThirdSlot;
     public static event Action<Monster> setFourthSlot;
-    private Monster slotOneID;
-    private Monster slotTwoID;
-    private Monster slotThreeID;
-    private Monster slotFourID;
 
-    public Monster SlotOneID => slotOneID;
-    public Monster SlotTwoID => slotTwoID;
-    public Monster SlotThreeID => slotThreeID;
-    public Monster SlotFourID => slotFourID;
+    private List<Monster> monsterSlots = new();
+    public List<Monster> MonsterSlots => monsterSlots;
 
+    private int maxSlots = 4;
+
+    private void Start()
+    {
+        Ball.pickedUpTheBall += PickedUpMonster;
+        LoadCurrentPets();
+    }
 
     private void OnEnable()
     {
-        Ball.pickedUpTheBall += PickedUpMonster;
+ 
     }
 
     private void OnDisable()
@@ -36,30 +40,26 @@ public class MonsterSpace : MonoBehaviour
     private void PickedUpMonster(int monsterID)
     {
         var monsters = Resources.Load<MonsterDatabase>("Database/MonsterDatabase").Monsters;
+
         foreach (var monster in monsters)
         {
+            Debug.Log("monsterId:" + monster.Id);
+            Debug.Log("monster" + monsterID);
             if (monster.Id == monsterID)
             {
-                availableMonsters.Add(monster);
-                if (slotOneID == null)
+                if (monsterSlots.Count < maxSlots)
                 {
-                    slotOneID = monster;
-                    setFirstSlot(monster);
+                    Debug.Log("add");
+                    monsterSlots.Add(monster);
+
+                    if (monsterSlots.Count == 1) setFirstSlot?.Invoke(monster);
+                    else if (monsterSlots.Count == 2) setSecondSlot?.Invoke(monster);
+                    else if (monsterSlots.Count == 3) setThirdSlot?.Invoke(monster);
+                    else if (monsterSlots.Count == 4) setFourthSlot?.Invoke(monster);
                 }
-                else if (slotTwoID == null)
+                else
                 {
-                    slotTwoID = monster;
-                    setSecondSlot(monster);
-                }
-                else if (slotThreeID == null)
-                {
-                    slotThreeID = monster;
-                    setThirdSlot(monster);
-                }
-                else if (slotFourID == null)
-                {
-                    slotFourID = monster;
-                    setFourthSlot(monster);
+
                 }
             }
         }
@@ -69,27 +69,57 @@ public class MonsterSpace : MonoBehaviour
     {
         List<int> pets = new List<int>();
 
-        if (slotOneID != null) pets.Add(slotOneID.Id);
-        if (slotTwoID != null) pets.Add(slotTwoID.Id);
-        if (slotThreeID != null) pets.Add(slotThreeID.Id);
-        if (slotFourID != null) pets.Add(slotFourID.Id);
 
+        for (int i = 0; i < monsterSlots.Count; i++)
+        {
+            if (monsterSlots[i] != null)
+            {
+                pets.Add(monsterSlots[i].Id);
+
+            }
+        }
         return pets;
     }
 
-    public Monster monsterInCurrentSlot(int slotNumber)
+    private void LoadCurrentPets()
+    {
+        var petData = Resources.Load<MonsterDatabase>("Database/MonsterDatabase").Monsters;
+        Debug.Log(monsterSlots.Count);
+
+        foreach (var pet in petsInSpaceData.monstersID)
+        {
+            foreach (var monster in petData)
+
+                if (monster.Id == pet)
+                {
+                    monsterSlots.Add(monster);
+
+                    if (monsterSlots.Count == 1)
+                    {
+                        setFirstSlot?.Invoke(monster);
+                    }
+                    else if (monsterSlots.Count == 2) setSecondSlot?.Invoke(monster);
+                    else if (monsterSlots.Count == 3) setThirdSlot?.Invoke(monster);
+                    else if (monsterSlots.Count == 4) setFourthSlot?.Invoke(monster);
+                }
+        }
+    }
+
+    public Monster MonsterInCurrentSlot(int slotNumber)
     {
         switch (slotNumber)
         {
             case 1:
-                return slotOneID;
+                return monsterSlots[0];
             case 2:
-                return slotTwoID;
+                return monsterSlots[1];
             case 3:
-                return slotThreeID;
+                return monsterSlots[2];
             case 4:
-                return slotFourID;
+                return monsterSlots[3];
         }
         return null;
     }
+
+
 }

@@ -87,7 +87,7 @@ public class PlayerThrowBall : MonoBehaviour
                 newBall.GetComponent<Rigidbody>().velocity = ballTrajectory * ballForce;
                 break;
             case TypeOfBall.ballWithMonster:
-                Monster monster = monsterSpace.monsterInCurrentSlot(currentMonsterSlot);
+                Monster monster = monsterSpace.MonsterInCurrentSlot(currentMonsterSlot);
                 newBall = Instantiate(ballWithMonster, pointForLaunch.position, Quaternion.identity);
                 newBall.GetComponent<BallWithMonster>().PutMosnterIn(monster);
                 newBall.GetComponent<Rigidbody>().velocity = ballTrajectory * ballForce;
@@ -144,9 +144,9 @@ public class PlayerThrowBall : MonoBehaviour
                 canThrow = true;
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetKeyDown(KeyCode.Alpha1) && monsterSpace.MonsterSlots.Count > 0)
             {
-                if (monsterSpace.SlotOneID != null)
+                if (monsterSpace.MonsterSlots[0] != null)
                 {
                     typeOfBall = TypeOfBall.ballWithMonster;
                     canThrow = true;
@@ -159,9 +159,9 @@ public class PlayerThrowBall : MonoBehaviour
                 currentMonsterSlot = 1;
                 setCurrentPetSlot?.Invoke(currentMonsterSlot);
             }
-            if (Input.GetKeyDown(KeyCode.Alpha2))
+            if (Input.GetKeyDown(KeyCode.Alpha2) && monsterSpace.MonsterSlots.Count > 0)
             {
-                if (monsterSpace.SlotTwoID != null)
+                if (monsterSpace.MonsterSlots[1] != null)
                 {
                     typeOfBall = TypeOfBall.ballWithMonster;
                     canThrow = true;
@@ -174,9 +174,9 @@ public class PlayerThrowBall : MonoBehaviour
                 currentMonsterSlot = 2;
                 setCurrentPetSlot?.Invoke(currentMonsterSlot);
             }
-            if (Input.GetKeyDown(KeyCode.Alpha3))
+            if (Input.GetKeyDown(KeyCode.Alpha3) && monsterSpace.MonsterSlots.Count > 0)
             {
-                if (monsterSpace.SlotThreeID != null)
+                if (monsterSpace.MonsterSlots[2] != null)
                 {
                     typeOfBall = TypeOfBall.ballWithMonster;
                     canThrow = true;
@@ -189,9 +189,9 @@ public class PlayerThrowBall : MonoBehaviour
                 currentMonsterSlot = 3;
                 setCurrentPetSlot?.Invoke(currentMonsterSlot);
             }
-            if (Input.GetKeyDown(KeyCode.Alpha4))
+            if (Input.GetKeyDown(KeyCode.Alpha4) && monsterSpace.MonsterSlots.Count > 0)
             {
-                if (monsterSpace.SlotFourID != null)
+                if (monsterSpace.MonsterSlots[3] != null)
                 {
                     typeOfBall = TypeOfBall.ballWithMonster;
                     canThrow = true;

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum SceneType
@@ -19,14 +20,15 @@ public class CameraManager : MonoBehaviour
 
     [SerializeField]
     private CinemachineFreeLook virtualCamera;
+
     [SerializeField]
-    private SceneType sceneType;
+    private  SceneType sceneType;
 
     public static SceneType SceneType;
 
     public static GameObject cameraTarget;
 
-    private void Start()
+    private void Awake()
     {
         SceneType = sceneType;
     }
@@ -34,7 +36,7 @@ public class CameraManager : MonoBehaviour
     public void SwapCameraTargetMain(GameObject target)
     {
 
-        switch (sceneType)
+        switch (SceneType)
         {
             case SceneType.main:
 
@@ -44,14 +46,17 @@ public class CameraManager : MonoBehaviour
                 playerIsNotMainCharacter?.Invoke();
 
                 var cameraTarget = target.transform.Find("CameraTarget");
+                if (cameraTarget == null) cameraTarget = target.transform;
                 virtualCamera.Follow = cameraTarget;
                 virtualCamera.LookAt = cameraTarget;
                 break;
 
             case SceneType.prepareForBattle:
+
                 CameraManager.cameraTarget = target;
 
                 cameraTarget = target.transform.Find("CameraTarget");
+                if (cameraTarget == null) cameraTarget = target.transform;
                 virtualCamera.Follow = cameraTarget;
                 virtualCamera.LookAt = cameraTarget;
                 break;
@@ -60,8 +65,8 @@ public class CameraManager : MonoBehaviour
                 mainCharacterSwapped?.Invoke(target);
 
                 CameraManager.cameraTarget = target;
-
                 cameraTarget = target.transform.Find("CameraTarget");
+                if (cameraTarget == null) cameraTarget = target.transform;
                 virtualCamera.Follow = cameraTarget;
                 virtualCamera.LookAt = cameraTarget;
                 break;

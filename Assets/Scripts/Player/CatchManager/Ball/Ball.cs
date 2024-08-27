@@ -31,6 +31,7 @@ public class Ball : MonoBehaviour
         if (monsterIn == true && other.gameObject.CompareTag("Player"))
         {
             pickedUpTheBall?.Invoke(id);
+            Debug.Log(id);
             Destroy(gameObject);
         }
     }

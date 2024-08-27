@@ -26,7 +26,7 @@ public class MainGUIManager : MonoBehaviour
 
     private Image currentSlot;
 
-    private void OnEnable()
+    private void Awake()
     {
         MonsterSpace.setFirstSlot += SetFirstSlot;
         MonsterSpace.setSecondSlot += SetSecondSlot;
@@ -84,6 +84,7 @@ public class MainGUIManager : MonoBehaviour
 
     private void SetFirstSlot(Monster pet)
     {
+
         petIcon1.sprite = pet.Icon;
     }
 

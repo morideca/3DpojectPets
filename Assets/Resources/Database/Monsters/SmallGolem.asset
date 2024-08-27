@@ -18,5 +18,5 @@ MonoBehaviour:
   description: Golem golem golem
   goEnemy: {fileID: 2270680805747297492, guid: 3c7506e7efa484743bb9ea8d41dd459f, type: 3}
   goPet: {fileID: 2270680805747297492, guid: 0f4cff63a94686b41b2db774252a32fa, type: 3}
-  previewGO: {fileID: 2270680805747297492, guid: 0f4cff63a94686b41b2db774252a32fa, type: 3}
+  previewGO: {fileID: 1067925524328404, guid: b0d3d16894c18994393399abc98aff83, type: 3}
   monsterType: 3

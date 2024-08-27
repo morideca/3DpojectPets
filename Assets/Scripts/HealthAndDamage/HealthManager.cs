@@ -43,11 +43,14 @@ public class HealthManager : MonoBehaviour, IDamageable
 
     public void Death()
     {
-        if (IAmPet) petDied?.Invoke(); 
+        if (isDead == false)
+        {
+            if (IAmPet) petDied?.Invoke();
+            animator.SetTrigger("die");
+            onDeath?.Invoke();
+            onDeathPrivate?.Invoke();
+        }
         isDead = true;
-        onDeath?.Invoke();
-        onDeathPrivate?.Invoke();
-        animator.SetTrigger("die");
     }
 
     public void GetDamage(int damage)
