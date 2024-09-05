@@ -5,25 +5,37 @@ using UnityEngine;
 
 public class BaseHumanoid : MonoBehaviour
 {
-    public static event Action<int> monsterJoinTheBattle;
+    public static event Action<Monster> monsterJoinTheBattle;
 
     [SerializeField]
     private int id;
+    private int level;
+    [SerializeField]
+    private int[] minMaxLevel;
     private Animator animator;
     private CharacterController controller;
     private HealthManager healthManager;
     private MonsterAI monsterAI;
 
+    public Monster monster;
+
     public int ID => id;
+    public int Level => level;
 
     public void IJoinTheBattleEvent()
     {
-        monsterJoinTheBattle?.Invoke(id);
+        monster.SetLevel(level);
+        monsterJoinTheBattle?.Invoke(monster);
     }
     private void OnDisable()
     {
         healthManager.onDeathPrivate -= OnDeath;
         GameManager.battleStart -= JoinTheBattle;
+    }
+
+    private void Awake()
+    {
+        level = UnityEngine.Random.Range(minMaxLevel[0], minMaxLevel[1]);
     }
 
     private void Start()
@@ -45,7 +57,7 @@ public class BaseHumanoid : MonoBehaviour
 
     private void JoinTheBattle()
     {
-        if (monsterAI.IsTaunted)
+        if (monsterAI.ISeePlayer)
         {
             IJoinTheBattleEvent();
         }

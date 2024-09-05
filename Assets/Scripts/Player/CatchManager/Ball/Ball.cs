@@ -18,6 +18,7 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+
         if (other.gameObject.TryGetComponent(out BaseHumanoid monster))
         {
             id = monster.ID;
@@ -28,6 +29,7 @@ public class Ball : MonoBehaviour
             monsterIn = true;
         }
         else if (!monsterIn) Destroy(gameObject);
+        
         if (monsterIn == true && other.gameObject.CompareTag("Player"))
         {
             pickedUpTheBall?.Invoke(id);

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BallWithMonster : MonoBehaviour
 {
-    private GameObject monster;
+    private Pet pet;
     private Rigidbody rb;
     private bool summoned = false;
 
@@ -16,9 +16,11 @@ public class BallWithMonster : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    public void PutMosnterIn(Monster monster)
+    public void PutMosnterIn(Pet pet)
     {
-        this.monster = monster.GOPet;
+        this.pet = pet;
+        Debug.Log(this.pet.CurrentHP);
+
     }
 
     private void Update()
@@ -26,8 +28,11 @@ public class BallWithMonster : MonoBehaviour
         if (rb.velocity.magnitude <= 0.5 && summoned == false)
         {
             summoned = true;
-            var monster = Instantiate(this.monster, transform.position, Quaternion.identity);
-            petSummoned?.Invoke(monster);
+            var pet = Instantiate(this.pet.GOPet, transform.position, Quaternion.identity);
+            var healthManager = pet.GetComponent<HealthManager>();
+            healthManager.SetCurrentHealth(this.pet.CurrentHP);
+            healthManager.SetMaxHealth(this.pet.MaxHP);
+            petSummoned?.Invoke(pet);
             Destroy(gameObject);
         }
     }

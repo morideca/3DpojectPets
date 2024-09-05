@@ -14,23 +14,25 @@ public enum MonsterTypes
 public class Monster : ScriptableObject
 {
     [SerializeField]
-    private string name;
+    protected string name;
     [SerializeField]
-    private int id;
+    protected int id;
     [SerializeField]
-    private Sprite icon;
+    protected Sprite icon;
     [SerializeField]
-    private string description;
+    protected string description;
     [SerializeField]
-    private GameObject goEnemy;
+    protected GameObject goEnemy;
     [SerializeField]
-    private GameObject goPet;
+    protected GameObject goPet;
     [SerializeField]
-    private GameObject previewGO;
+    protected GameObject previewGO;
     [SerializeField]
-    private MonsterTypes monsterType;
+    protected MonsterTypes monsterType;
+    private int level;
 
-
+    [SerializeField]
+    protected Monster evolutionForm;
 
     public string Name => name;
     public int Id => id;
@@ -40,4 +42,11 @@ public class Monster : ScriptableObject
     public GameObject PreviewGO => previewGO;
     public Sprite Icon => icon;
     public MonsterTypes MonsterType => monsterType;
+    public int Level => level;
+    public Monster EvolutionForm => evolutionForm;
+
+    public void SetLevel(int amount)
+    {
+        level = amount;
+    }
 }

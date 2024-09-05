@@ -20,7 +20,7 @@ public class SpawnManager : MonoBehaviour
 
     private Vector3 spawnPoint;
 
-    private GameObject monsterGO;
+    private Monster monster;
 
     
 
@@ -30,7 +30,7 @@ public class SpawnManager : MonoBehaviour
         MonsterDatabase monsterData = Resources.Load<MonsterDatabase>("Database/MonsterDatabase");
         foreach (var monster in monsterData.Monsters)
         {
-            if (monster.MonsterType == monsterType) monsterGO = monster.GOEnemy;
+            if (monster.MonsterType == monsterType) this.monster = monster;
         }
         SpawnMonster(startMonsterCount);
     }
@@ -60,8 +60,9 @@ public class SpawnManager : MonoBehaviour
     private void InstantiateMonster()
     {
         SetSpawnPoint(RandomPosition());
-        var monster = Instantiate(monsterGO, spawnPoint, Quaternion.identity);
+        var monster = Instantiate(this.monster.GOEnemy, spawnPoint, Quaternion.identity);
         monster.GetComponent<HealthManager>().onDeathPrivate += StartSpawnCooldown;
+        monster.GetComponent<BaseHumanoid>().monster = this.monster;
     }
 
     private void StartSpawnCooldown()

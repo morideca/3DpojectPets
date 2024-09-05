@@ -14,9 +14,9 @@ public enum SceneType
 }
 public class CameraManager : MonoBehaviour
 {
-    public static event Action<GameObject> mainCharacterSwapped;
-    public static event Action playerIsMainCharacter;
-    public static event Action playerIsNotMainCharacter;
+    public static event Action<GameObject> OnMainCharacterSwapped;
+    public static event Action OnPlayerIsMainCharacter;
+    public static event Action OnPlayerIsNotMainCharacter;
 
     [SerializeField]
     private CinemachineFreeLook virtualCamera;
@@ -39,11 +39,10 @@ public class CameraManager : MonoBehaviour
         switch (SceneType)
         {
             case SceneType.main:
-
                 CameraManager.cameraTarget = target;
 
-                mainCharacterSwapped?.Invoke(target);
-                playerIsNotMainCharacter?.Invoke();
+                OnMainCharacterSwapped?.Invoke(target);
+                OnPlayerIsNotMainCharacter?.Invoke();
 
                 var cameraTarget = target.transform.Find("CameraTarget");
                 if (cameraTarget == null) cameraTarget = target.transform;
@@ -62,7 +61,8 @@ public class CameraManager : MonoBehaviour
                 break;
 
             case SceneType.battle:
-                mainCharacterSwapped?.Invoke(target);
+                OnMainCharacterSwapped?.Invoke(target);
+                OnPlayerIsNotMainCharacter?.Invoke();
 
                 CameraManager.cameraTarget = target;
                 cameraTarget = target.transform.Find("CameraTarget");
@@ -75,8 +75,8 @@ public class CameraManager : MonoBehaviour
 
     public void ReturnCameraToPlayer(GameObject player, bool firstVoid)
     {
-        if (!firstVoid) playerIsMainCharacter?.Invoke();
-        mainCharacterSwapped?.Invoke(player);
+        if (!firstVoid) OnPlayerIsMainCharacter?.Invoke();
+        OnMainCharacterSwapped?.Invoke(player);
         cameraTarget = player;
         virtualCamera.Follow = player.transform.Find("CameraTarget");
         virtualCamera.LookAt = player.transform.Find("CameraTarget");

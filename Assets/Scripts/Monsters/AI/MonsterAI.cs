@@ -2,18 +2,24 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
+enum EnemyStates
+{
+    idle, 
+    run,
+    attack,
+    dead,
+    goingBack
+}
+
 public abstract class MonsterAI : MonoBehaviour
 {
     public static event Action monsterToutchedPlayer;
     public static event Action<GameObject, int> monsterAttackedPet;
 
     protected HealthManager healthManager;
-
     protected GameObject target;
     protected GameObject player;
-
     protected Animator animator;
-
     protected NavMeshAgent meshAgent;
 
     [SerializeField]
@@ -26,25 +32,33 @@ public abstract class MonsterAI : MonoBehaviour
     protected float tauntRange;
     [SerializeField]
     protected float attackRange;
+
     protected float attackCooldownTime = 3;
     protected float abilityCooldown = 6;
     protected float abilityDamage = 40;
     protected float distanceToTarget;
+
     protected int attackDamage = 5;
+
     protected Vector3 addHeight = Vector3.up;
 
     protected bool attackOnCooldown;
     protected bool abilityOnCooldown;
-    protected bool tauntOn = false;
+    protected bool iSeePlayer = false;
     protected bool targetIsHuman = true;
     protected bool animating;
     protected bool inBattle;
 
-    private Vector3 pointWhereStartedAgr;
-
     private bool goingToStartPosition = false;
 
-    public bool IsTaunted => tauntOn;
+    public bool ISeePlayer => iSeePlayer;
+
+    public float DistanceToTarget => distanceToTarget;
+
+    private Vector3 pointWhereStartedAgr;
+    private Vector3 pointOfTargetCollider;
+
+    private const string running = "running";
 
     public virtual void Start()
     {
@@ -65,10 +79,9 @@ public abstract class MonsterAI : MonoBehaviour
         healthManager = GetComponent<HealthManager>();
         meshAgent = GetComponent<NavMeshAgent>();
 
-
-        CameraManager.mainCharacterSwapped += ChangeTarget;
-        CameraManager.playerIsMainCharacter += TargetIsHuman;
-        CameraManager.playerIsNotMainCharacter += TargetIsNotHuman;
+        CameraManager.OnMainCharacterSwapped += ChangeTarget;
+        CameraManager.OnPlayerIsMainCharacter += TargetIsHuman;
+        CameraManager.OnPlayerIsNotMainCharacter += TargetIsNotHuman;
     }
 
     private void OnEnable()
@@ -78,9 +91,9 @@ public abstract class MonsterAI : MonoBehaviour
 
     public virtual void OnDisable()
     {
-        CameraManager.mainCharacterSwapped -= ChangeTarget;
-        CameraManager.playerIsMainCharacter -= TargetIsHuman;
-        CameraManager.playerIsNotMainCharacter -= TargetIsNotHuman;
+        CameraManager.OnMainCharacterSwapped -= ChangeTarget;
+        CameraManager.OnPlayerIsMainCharacter -= TargetIsHuman;
+        CameraManager.OnPlayerIsNotMainCharacter -= TargetIsNotHuman;
     }
 
     public virtual void Update()
@@ -95,52 +108,52 @@ public abstract class MonsterAI : MonoBehaviour
 
         if (!goingToStartPosition)
         {
-            distanceToTarget = Vector3.Distance(target.transform.position, transform.position);
-            if (!healthManager.IsDead)
+            if (healthManager.IsDead) return;
+
+            CheckForMostClosePointOfTarget();
+            distanceToTarget = Vector3.Distance(pointOfTargetCollider, transform.position);
+            if (!animating && target != null)
             {
-                if (!animating && target != null)
+                if (!inBattle)
                 {
-                    if (!inBattle)
+                    if (distanceToTarget <= tauntRange)
                     {
-                        distanceToTarget = Vector3.Distance(target.transform.position, transform.position);
-                        if (distanceToTarget <= tauntRange)
-                        {
-                            CheckIfYouSeePlayer();
-                        }
-                        else 
-                        {
-                            StopMove();
-                            if (Vector3.Distance(pointWhereStartedAgr, transform.position) > 0.5f)
-                            {
-                                goingToStartPosition = true;
-                                GoToPoint(pointWhereStartedAgr);
-                            }
-                        }
-                    }
-                }
-                if (!goingToStartPosition)
-                {
-                    if (!animating && (tauntOn || inBattle))
-                    {
-                        FollowTarget();
-                        meshAgent.isStopped = false;
+                        CheckIfYouSeePlayer();
                     }
                     else
                     {
-                        meshAgent.isStopped = true;
-                        animator.SetBool("running", false);
-                    }
-
-                    if (targetIsHuman && distanceToTarget <= 3 && !animating)
-                    {
-                        MonsterToutchedPlayer();
-                    }
-                    else if (distanceToTarget <= attackRange && !animating)
-                    {
-                        Attack();
+                        StopMove();
+                        if (Vector3.Distance(pointWhereStartedAgr, transform.position) > 0.5f)
+                        {
+                            goingToStartPosition = true;
+                            GoToPoint(pointWhereStartedAgr);
+                        }
                     }
                 }
             }
+            if (goingToStartPosition) return;
+
+            if (!animating && (iSeePlayer || inBattle) && distanceToTarget > +attackRange)
+            {
+                FollowTarget();
+                meshAgent.isStopped = false;
+            }
+            else
+            {
+                meshAgent.isStopped = true;
+                animator.SetBool(running, false);
+            }
+
+            if (targetIsHuman && distanceToTarget <= 3 && !animating)
+            {
+                MonsterToutchedPlayer();
+            }
+
+            if (!targetIsHuman && distanceToTarget <= attackRange && !animating)
+            {
+                Attack();
+            }
+
         }
     }
 
@@ -162,16 +175,16 @@ public abstract class MonsterAI : MonoBehaviour
         {
             animator.SetTrigger("attack");
             attackOnCooldown = true;
-            Invoke("attackCooldownOff", attackCooldownTime);
+            Invoke("AttackCooldownOff", attackCooldownTime);
         }
     }
 
-    public void attackCooldownOff()
+    public void AttackCooldownOff()
     {
         attackOnCooldown = false;
     }
 
-    public void abilityCooldownOff()
+    public void AbilityCooldownOff()
     {
         abilityOnCooldown = false;
     }
@@ -197,28 +210,43 @@ public abstract class MonsterAI : MonoBehaviour
         Vector3 direction = targetPos - pointForRay.position;
         if (Physics.Raycast(pointForRay.position, direction, out var hit, wallLayer))
         {
-            if (tauntOn == false && hit.collider.CompareTag("Player"))
+            if (iSeePlayer == false && (hit.collider.CompareTag("Player") || hit.collider.CompareTag("Pet")))
             {
                 animator.SetTrigger("taunted");
-                TauntOn();
+                ISeePlayerOn();
+            }
+        }
+    }
+
+    public void CheckForMostClosePointOfTarget()
+    {
+        Vector3 targetPos = target.transform.position + addHeight;
+        Vector3 direction = targetPos - pointForRay.position;
+        int layerNumber = 6;
+        LayerMask layerMask = 1 << layerNumber;
+        if (Physics.Raycast(pointForRay.position, direction, out var hit, 100, layerMask))
+        {
+            if (hit.collider != null)
+            {
+                pointOfTargetCollider = hit.point;
             }
         }
     }
 
     public void GoToPoint(Vector3 point)
     {
-        if (meshAgent.isStopped == true) meshAgent.isStopped = false;
+        meshAgent.isStopped = false;
         meshAgent.destination = point;
     }
 
-    public void TauntOn()
+    public void ISeePlayerOn()
     {
-        tauntOn = true;
+        iSeePlayer = true;
     }
 
     public void StopMove()
     {
-        tauntOn = false;
+        iSeePlayer = false;
         meshAgent.isStopped = true;
     }
 

@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 386027568285845516}
   m_Layer: 6
   m_Name: PetGolemSmall
-  m_TagString: Player
+  m_TagString: Pet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -141,6 +141,7 @@ Transform:
   - {fileID: 839752435246705670}
   - {fileID: 92155875014356341}
   - {fileID: 5755214057718445498}
+  - {fileID: 9150278606329443359}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2431604194732493038
@@ -172,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34d0aad74ac3fe74493617f6e664764b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 200
 --- !u!114 &2993077626120859084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,16 +200,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2daf94fa7b986054fb7501e3e6f9ed02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  simpleAttackPoint: {fileID: 3734009656487865301}
-  attack1Damage: 5
+  simpleAttackPoint: {fileID: 9150278606329443359}
+  attack1Damage: 10
   attack2Damage: 20
   attack1CooldownTime: 5
-  attack2CooldownTime: 1
+  attack2CooldownTime: 4
   pointForRockCreate: {fileID: 839752435246705670}
   throwPoint: {fileID: 92155875014356341}
   grabPoint: {fileID: 5739065470137803597}
   ballForce: 5
   rock: {fileID: 1375754531036840, guid: 285470d5271b8ed4faec7da0f1008877, type: 3}
+  throwRockCooldownTime: 5
 --- !u!95 &4219486182479935772
 Animator:
   serializedVersion: 5
@@ -1038,6 +1040,37 @@ SkinnedMeshRenderer:
     m_Center: {x: -80.1039, y: -2.447403, z: 17.706985}
     m_Extent: {x: 241.08421, y: 215.05971, z: 397.3723}
   m_DirtyAABB: 0
+--- !u!1 &7083879210168010998
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9150278606329443359}
+  m_Layer: 6
+  m_Name: pointForSimpleAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9150278606329443359
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7083879210168010998}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.638, z: 2.286}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6977175822551196039}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7716813206218913975
 GameObject:
   m_ObjectHideFlags: 0

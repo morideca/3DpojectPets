@@ -17,6 +17,7 @@ public class GolemManager : AttackManager
     [SerializeField]
     private GameObject rock;
 
+    [SerializeField]
     private float throwRockCooldownTime = 2;
     private bool throwRockOnCooldown = false;
 
@@ -39,23 +40,24 @@ public class GolemManager : AttackManager
 
     public override void Update()
     {
+        Debug.Log(throwRockOnCooldown);
         if (canAttack && playerMoveHumanoid.IsGrounded == true)
         {
             if (!isAttacking && !throwRockOnCooldown)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse0))
+                if (!throwRockOnCooldown && Input.GetKeyDown(KeyCode.Mouse0))
                 {
                     lineRenderer.enabled = true;
                     playerMoveHumanoid.FreezeThrowRotation();
                     showTrajectory = true;
                 }
 
-                if (showTrajectory && Input.GetKey(KeyCode.Mouse0))
+                if (!throwRockOnCooldown && showTrajectory && Input.GetKey(KeyCode.Mouse0))
                 {
                     ShowTrajectory();
                 }
 
-                if (Input.GetKeyUp(KeyCode.Mouse0))
+                if (!throwRockOnCooldown && Input.GetKeyUp(KeyCode.Mouse0))
                 {
                     playerMoveHumanoid.UnFreezeThrowRotation();
                     animator.SetTrigger("attack1");

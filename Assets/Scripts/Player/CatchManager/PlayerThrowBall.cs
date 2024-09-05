@@ -32,7 +32,9 @@ public class PlayerThrowBall : MonoBehaviour
     private bool isMainCharacter = true;
     private bool canThrow = true;
 
-    private int currentMonsterSlot = 1;
+    private static int currentMonsterSlot = 1;
+
+    public static int CurrentMosnterSlot => currentMonsterSlot;
 
     private float vertical;
 
@@ -52,12 +54,12 @@ public class PlayerThrowBall : MonoBehaviour
 
     private void OnEnable()
     {
-        CameraManager.mainCharacterSwapped += EnableOrDisableCanThrow;
+        CameraManager.OnMainCharacterSwapped += EnableOrDisableCanThrow;
     }
 
     private void OnDisable()
     {
-        CameraManager.mainCharacterSwapped -= EnableOrDisableCanThrow;
+        CameraManager.OnMainCharacterSwapped -= EnableOrDisableCanThrow;
     }
 
     private void Start()
@@ -87,9 +89,9 @@ public class PlayerThrowBall : MonoBehaviour
                 newBall.GetComponent<Rigidbody>().velocity = ballTrajectory * ballForce;
                 break;
             case TypeOfBall.ballWithMonster:
-                Monster monster = monsterSpace.MonsterInCurrentSlot(currentMonsterSlot);
+                Pet pet = monsterSpace.MonsterInCurrentSlot(currentMonsterSlot);
                 newBall = Instantiate(ballWithMonster, pointForLaunch.position, Quaternion.identity);
-                newBall.GetComponent<BallWithMonster>().PutMosnterIn(monster);
+                newBall.GetComponent<BallWithMonster>().PutMosnterIn(pet);
                 newBall.GetComponent<Rigidbody>().velocity = ballTrajectory * ballForce;
                 break;
         }
@@ -144,9 +146,9 @@ public class PlayerThrowBall : MonoBehaviour
                 canThrow = true;
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha1) && monsterSpace.MonsterSlots.Count > 0)
+            if (Input.GetKeyDown(KeyCode.Alpha1) && monsterSpace.PetInSlots.Count > 0)
             {
-                if (monsterSpace.MonsterSlots[0] != null)
+                if (monsterSpace.PetInSlots[0] != null)
                 {
                     typeOfBall = TypeOfBall.ballWithMonster;
                     canThrow = true;
@@ -159,9 +161,9 @@ public class PlayerThrowBall : MonoBehaviour
                 currentMonsterSlot = 1;
                 setCurrentPetSlot?.Invoke(currentMonsterSlot);
             }
-            if (Input.GetKeyDown(KeyCode.Alpha2) && monsterSpace.MonsterSlots.Count > 0)
+            if (Input.GetKeyDown(KeyCode.Alpha2) && monsterSpace.PetInSlots.Count > 0)
             {
-                if (monsterSpace.MonsterSlots[1] != null)
+                if (monsterSpace.PetInSlots[1] != null)
                 {
                     typeOfBall = TypeOfBall.ballWithMonster;
                     canThrow = true;
@@ -174,9 +176,9 @@ public class PlayerThrowBall : MonoBehaviour
                 currentMonsterSlot = 2;
                 setCurrentPetSlot?.Invoke(currentMonsterSlot);
             }
-            if (Input.GetKeyDown(KeyCode.Alpha3) && monsterSpace.MonsterSlots.Count > 0)
+            if (Input.GetKeyDown(KeyCode.Alpha3) && monsterSpace.PetInSlots.Count > 0)
             {
-                if (monsterSpace.MonsterSlots[2] != null)
+                if (monsterSpace.PetInSlots[2] != null)
                 {
                     typeOfBall = TypeOfBall.ballWithMonster;
                     canThrow = true;
@@ -189,9 +191,9 @@ public class PlayerThrowBall : MonoBehaviour
                 currentMonsterSlot = 3;
                 setCurrentPetSlot?.Invoke(currentMonsterSlot);
             }
-            if (Input.GetKeyDown(KeyCode.Alpha4) && monsterSpace.MonsterSlots.Count > 0)
+            if (Input.GetKeyDown(KeyCode.Alpha4) && monsterSpace.PetInSlots.Count > 0)
             {
-                if (monsterSpace.MonsterSlots[3] != null)
+                if (monsterSpace.PetInSlots[3] != null)
                 {
                     typeOfBall = TypeOfBall.ballWithMonster;
                     canThrow = true;

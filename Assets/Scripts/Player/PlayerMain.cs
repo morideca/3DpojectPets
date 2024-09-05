@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerMain : MonoBehaviour
@@ -9,18 +10,23 @@ public class PlayerMain : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
+
     }
 
     private void OnEnable()
     {
-       CameraManager.playerIsMainCharacter += SitUp;
-       CameraManager.playerIsNotMainCharacter += SitDown;
+        CameraManager.OnPlayerIsMainCharacter += SitUp;
+        CameraManager.OnPlayerIsNotMainCharacter += SitDown;
+        BattleManager.winBattle += WinBattle;
+        BattleManager.loseBattle += LoseBattle;
     }
 
     private void OnDisable()
     {
-        CameraManager.playerIsMainCharacter -= SitUp;
-        CameraManager.playerIsNotMainCharacter -= SitDown;
+        CameraManager.OnPlayerIsMainCharacter -= SitUp;
+        CameraManager.OnPlayerIsNotMainCharacter -= SitDown;
+        BattleManager.winBattle -= WinBattle;
+        BattleManager.loseBattle -= LoseBattle;
     }
     private void SitDown()
     {
@@ -30,6 +36,16 @@ public class PlayerMain : MonoBehaviour
     private void SitUp()
     {
         animator.SetTrigger("sitUp");
+    }
+
+    private void WinBattle()
+    {
+        animator.SetTrigger("cheer");
+    }
+
+    private void LoseBattle()
+    {
+
     }
 
 }

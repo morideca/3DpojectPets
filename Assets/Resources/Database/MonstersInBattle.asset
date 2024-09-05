@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba63d9cfcc82f004bb97046c5c3bef6c, type: 3}
   m_Name: MonstersInBattle
   m_EditorClassIdentifier: 
-  monstersID: 00000000
+  monstersID: 01000000

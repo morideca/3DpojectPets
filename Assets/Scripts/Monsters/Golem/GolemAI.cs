@@ -25,7 +25,7 @@ public class GolemAI : MonsterAI
     {
         base.Update();
 
-        if (!targetIsHuman && !animating && distanceToTarget < distanceForAbility && distanceToTarget > 2 && abilityOnCooldown == false)
+        if (!targetIsHuman && !animating && distanceToTarget < distanceForAbility && distanceToTarget > 3 && abilityOnCooldown == false)
         {
             UseAbility();
         }
@@ -40,7 +40,7 @@ public class GolemAI : MonsterAI
     {
         animator.SetTrigger("ability");
         abilityOnCooldown = true;
-        Invoke("abilityCooldownOff", abilityCooldown);
+        Invoke("AbilityCooldownOff", abilityCooldown);
     }
 
 
@@ -55,7 +55,7 @@ public class GolemAI : MonsterAI
         foreach (GameObject target in targets)
         {
             Debug.Log("dealDamage" + target);
-            if ( target.CompareTag("Player")) 
+            if ( target.CompareTag("Pet")) 
             {
                 DealDamage(rockDamage, target);
             }

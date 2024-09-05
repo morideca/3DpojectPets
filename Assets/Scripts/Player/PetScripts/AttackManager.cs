@@ -40,12 +40,12 @@ public abstract class AttackManager : MonoBehaviour
 
     private void OnEnable()
     {
-        CameraManager.mainCharacterSwapped += CheckForNewCameraTarget;
+        CameraManager.OnMainCharacterSwapped += CheckForNewCameraTarget;
     }
 
     private void OnDisable()
     {
-        CameraManager.mainCharacterSwapped -= CheckForNewCameraTarget;
+        CameraManager.OnMainCharacterSwapped -= CheckForNewCameraTarget;
     }
 
 

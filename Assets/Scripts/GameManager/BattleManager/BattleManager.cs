@@ -1,12 +1,16 @@
 using Cinemachine;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class BattleManager : MonoBehaviour
 {
-    
+    public static event Action winBattle;
+    public static event Action loseBattle;
+
+    [SerializeField]
+    private GameObject player;
     [SerializeField]
     Transform targetLook;
 
@@ -27,13 +31,11 @@ public class BattleManager : MonoBehaviour
     private Transform monsterSlot5;
     private Transform currentMonsterSlot;
 
-    private List<GameObject> monstersGO = new List<GameObject>();
-    private List<GameObject> petsGO = new List<GameObject>();
+    private List<GameObject> allMonstersInBattle = new List<GameObject>();
 
-    private List<GameObject> allMonstersGO = new List<GameObject>();
+    private List<Monster> monsters = new();
+    private GameObject currentPet;
 
-    private List<int> monsters = new List<int>();
-    private List<int> pets = new List<int>();
 
     [SerializeField]
     private MonsterDatabase monsterDatabase;
@@ -41,6 +43,8 @@ public class BattleManager : MonoBehaviour
     private BattleMonstersData mostersInBattle;
     [SerializeField]
     private BattleMonstersData petsInBattle;
+
+    private int currentNumberOfMonsters;
 
     [SerializeField]
     private GameObject playerGO;
@@ -52,15 +56,27 @@ public class BattleManager : MonoBehaviour
     private static GameObject currentMainCharacter;
     public static GameObject CurrentMainCharacter => currentMainCharacter;
 
+    private void OnEnable()
+    {
+        BallWithMonster.petSummoned += SwapCameraTarget;
+        HealthManager.petDied += ReturnCameraToPlayer;
+    }
+
+    private void OnDisable()
+    {
+        BallWithMonster.petSummoned -= SwapCameraTarget;
+        HealthManager.petDied -= ReturnCameraToPlayer;
+    }
+
     void Start()
     {
         cameraManager = GetComponent<CameraManager>();
-        monsters = mostersInBattle.monstersID;
-        pets = petsInBattle.monstersID;
+        monsters = mostersInBattle.monsters;
         currentPetSlot = petSlot1;
         currentMonsterSlot = monsterSlot1;
         AddPetsAndMonsters();
-        cameraManager.SwapCameraTargetMain(allMonstersGO[0]);
+        SwapCameraTarget(currentPet);
+        Debug.Log(currentMainCharacter.name);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -69,48 +85,85 @@ public class BattleManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            cameraManager.ReturnCameraToPlayer(playerGO, false);
+            ReturnCameraToPlayer();
         }
     }
 
     private void AddPetsAndMonsters()
     {
-
-        foreach (var monster in monsterDatabase.Monsters)
-        {
-            if (monsters[0] == monster.Id)
-            {
-                targetGO = monster.GOPet;
-            }
-        }
         Vector3 directionToLook = targetLook.position - currentPetSlot.position;
         directionToLook.y = 0;
         Quaternion rotationToLook = Quaternion.LookRotation(directionToLook);
-        var go = Instantiate(targetGO, currentPetSlot.position, rotationToLook);
-        allMonstersGO.Add(go);
-        ChooseMonsterSlot(0);
+        targetGO = PetSpaceData.Pets[0].GOPet;
+        currentPet = Instantiate(targetGO, currentPetSlot.position, rotationToLook);
+        var healthManager = currentPet.GetComponent<HealthManager>();
+        healthManager.SetMaxHealth(PetSpaceData.Pets[0].MaxHP);
+        healthManager.SetCurrentHealth(PetSpaceData.Pets[0].CurrentHP);
 
-
-        for (int i = 0; i < monsters.Count; i++)
+        int i = 0;
+        foreach (var monster in monsters) 
         {
-            if (monsters[i] > 0)
-            {
-                foreach (var monster in monsterDatabase.Monsters)
-                {
-                    if (monsters[i] == monster.Id)
-                    {
-                        targetGO = monster.GOEnemy;
-                    }
-                }
-            }
+            if (i > 4) return;
             directionToLook = targetLook.position - currentMonsterSlot.position;
             directionToLook.y = 0;
             rotationToLook = Quaternion.LookRotation(directionToLook);
-            go = Instantiate(targetGO, currentMonsterSlot.position, rotationToLook);
-            allMonstersGO.Add(go);
+            var go = Instantiate(monster.GOEnemy, currentMonsterSlot.position, rotationToLook);
+            healthManager = go.GetComponent<HealthManager>();
+            healthManager.onDeathPrivate += CheckForLastMonsters;
+            allMonstersInBattle.Add(go);
             if (i > 4) go.SetActive(false);
             ChooseMonsterSlot(i + 1);
         }
+        currentNumberOfMonsters = allMonstersInBattle.Count;
+
+    }
+
+    private void CheckForLastMonsters()
+    {
+        currentNumberOfMonsters--;
+        if (currentNumberOfMonsters == 0)
+        {
+            WinTheBattle();
+        }
+    }
+
+    private void WinTheBattle()
+    {
+        winBattle?.Invoke();
+        ReturnCameraToPlayer();
+        foreach (var pet in PetSpaceData.Pets)
+        {
+            pet.AddExp(ExpForWin());
+        }
+        Invoke("LoadMainScene", 2f);
+    }
+
+    private void LoadMainScene()
+    {
+        SceneManager.LoadScene("MainScene");
+    }
+
+    private int ExpForWin()
+    {
+        int exp = 0;
+        foreach (var monster in allMonstersInBattle)
+        {
+            var baseHumanoid = monster.GetComponent<BaseHumanoid>();
+            exp += baseHumanoid.Level * 5;
+        }
+        return exp;
+    }
+
+    private void SwapCameraTarget(GameObject target)
+    {
+        cameraManager.SwapCameraTargetMain(target);
+        currentMainCharacter = target;
+    }
+    private void ReturnCameraToPlayer()
+    {
+        if (currentMainCharacter != player) Destroy(currentMainCharacter.gameObject);
+        currentMainCharacter = player;
+        cameraManager.ReturnCameraToPlayer(player, true);
     }
 
     private void ChooseMonsterSlot(int index)

@@ -2484,16 +2484,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5140136839529375399}
+  - component: {fileID: 1358124536429706313}
   - component: {fileID: 2197229748657770976}
   - component: {fileID: 5686434593471952966}
-  - component: {fileID: 1257823688072714725}
   - component: {fileID: 8782802285037497879}
   - component: {fileID: 2925467385710008209}
   - component: {fileID: 644041904422115628}
   - component: {fileID: 5167992047256023771}
   m_Layer: 6
   m_Name: PetSkelet
-  m_TagString: Player
+  m_TagString: Pet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2528,6 +2528,23 @@ Transform:
   - {fileID: 3785312843406177261}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1358124536429706313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8932495650570871541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2e17b807a27ddd43951359d2b7ada41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  simpleAttackPoint: {fileID: 2577366323720217632}
+  attack1Damage: 100
+  attack2Damage: 200
+  attack1CooldownTime: 3
+  attack2CooldownTime: 5
 --- !u!114 &2197229748657770976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2554,24 +2571,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34d0aad74ac3fe74493617f6e664764b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthLevelScale: 10
   maxHealth: 100
---- !u!114 &1257823688072714725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8932495650570871541}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2e17b807a27ddd43951359d2b7ada41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  simpleAttackPoint: {fileID: 2577366323720217632}
-  attack1: 5
-  attack2: 5
-  attack1CooldownTime: 3
-  attack2CooldownTime: 5
 --- !u!114 &8782802285037497879
 MonoBehaviour:
   m_ObjectHideFlags: 0

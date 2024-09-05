@@ -13,7 +13,8 @@ public class HealthManager : MonoBehaviour, IDamageable
 
     public static event Action onDeath;
     public event Action onDeathPrivate;
-
+    [SerializeField]
+    private int healthLevelScale;
     [SerializeField]
     private int maxHealth;
     private int currentHealth;
@@ -31,9 +32,18 @@ public class HealthManager : MonoBehaviour, IDamageable
     void Start()
     {
         animator = GetComponent<Animator>();
-        currentHealth = maxHealth;
         if (GameManager.CurrentMainCharacter != null && GameManager.CurrentMainCharacter == this.gameObject) IAmPet = true;
         else if (BattleManager.CurrentMainCharacter != null && BattleManager.CurrentMainCharacter == this.gameObject) IAmPet = true;
+
+        if (!IAmPet)
+        {
+            var baseHumanoid = GetComponent<BaseHumanoid>();
+            maxHealth = 100 + baseHumanoid.Level * healthLevelScale;
+            currentHealth = maxHealth;
+            Debug.Log("my level is: " + baseHumanoid.Level);
+        }
+        Debug.Log("my maxHealth is: " + maxHealth);
+        wasDamaged?.Invoke(currentHealth);
     }
 
     void Update()
@@ -59,6 +69,16 @@ public class HealthManager : MonoBehaviour, IDamageable
         currentHealth -= damage;
         wasDamaged?.Invoke(currentHealth);
         if (currentHealth <= 0) Death();
+    }
+
+    public void SetCurrentHealth(int value)
+    {
+        currentHealth = value;
+    }
+
+    public void SetMaxHealth(int value)
+    {
+        maxHealth = value;
     }
 
     public void GetHealth(int amount)

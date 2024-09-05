@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static event Action<GameObject> OnPetReturn;
+
     [SerializeField]
     private static SceneType sceneType;
     [SerializeField]
@@ -17,7 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private BattleMonstersData monstersForBattle;
     [SerializeField]
-    private BattleMonstersData petsForBattle;
+    private BattlePetData petsForBattle;
 
 
     public static event Action battleStart;
@@ -77,23 +79,27 @@ public class GameManager : MonoBehaviour
 
     private void ReturnCameraToPlayer()
     {
-        if (currentMainCharacter != player) Destroy(currentMainCharacter.gameObject);
+        if (currentMainCharacter != player)
+        {
+            OnPetReturn?.Invoke(currentMainCharacter);
+            Destroy(currentMainCharacter.gameObject);
+        }
         currentMainCharacter = player;
         cameraManager.ReturnCameraToPlayer(player, false);
     }
 
     private void BattleStarts() 
     {
-        monstersForBattle.monstersID = new List<int>();
+        monstersForBattle.monsters = new List<Monster>();
         battleStart?.Invoke();
-        petsForBattle.monstersID = player.GetComponent<MonsterSpace>().CurrentPets();
+        //petsForBattle.pets = player.GetComponent<MonsterSpace>().PetInSlots;
 
         LoadPreparationScence();
     }
 
-    private void AddMonsterToBattle(int monsterID)
+    private void AddMonsterToBattle(Monster monster)
     {
-        monstersForBattle.monstersID.Add(monsterID);
+        monstersForBattle.monsters.Add(monster);
     }
 
     private void LoadPreparationScence()

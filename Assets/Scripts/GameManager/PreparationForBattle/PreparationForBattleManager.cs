@@ -36,8 +36,8 @@ public class PreparationForBattleManager : MonoBehaviour
     private List<GameObject> petsGO = new List<GameObject>();
     private List<GameObject> allMonstersGO = new List<GameObject>();
 
-    private List<int> monsters = new List<int>();
-    private List<int> pets = new List<int>();
+    private List<Monster> monsters = new();
+    private List<Pet> pets = new();
 
     [SerializeField]
     private MonsterDatabase monsterDatabase;
@@ -60,8 +60,8 @@ public class PreparationForBattleManager : MonoBehaviour
     {
         cameraManager = GetComponent<CameraManager>();
 
-        monsters = mostersInBattle.monstersID;
-        pets = petsInBattle.monstersID;
+        monsters = mostersInBattle.monsters;
+        pets = PetSpaceData.Pets;
 
         currentPetSlot = petSlot1;
         currentMonsterSlot = monsterSlot1;
@@ -102,46 +102,30 @@ public class PreparationForBattleManager : MonoBehaviour
 
     private void AddPetsAndMonsters()
     {
-        for (int i = 0; i < pets.Count; i++)
+        int i = 0;
+        foreach (var pet in pets)
         {
-            if (pets[i] > 0)
-            {
-                foreach (var monster in monsterDatabase.Monsters)
-                {
-                    if (pets[i] == monster.Id)
-                    {
-                        targetGO = monster.PreviewGO;
-                    }
-                }
-                Vector3 directionToLook = targetLook.position - currentPetSlot.position;
-                directionToLook.y = 0;
-                Quaternion rotationToLook = Quaternion.LookRotation(directionToLook);
-                var go = Instantiate(targetGO, currentPetSlot.position, rotationToLook);
-                allMonstersGO.Add(go);
-                SavePetGO(go);
-                ChoosePetSlot(i);
-            }
+            Vector3 directionToLook = targetLook.position - currentPetSlot.position;
+            directionToLook.y = 0;
+            Quaternion rotationToLook = Quaternion.LookRotation(directionToLook);
+            var go = Instantiate(pet.PreviewGO, currentPetSlot.position, rotationToLook);
+            allMonstersGO.Add(go);
+            SavePetGO(go);
+            ChoosePetSlot(i);
+            i++;
         }
 
-        for (int i = 0; i < monsters.Count; i++)
+        i = 0;
+        foreach (var monster in monsters)
         {
-            if (monsters[i] > 0)
-            { 
-                foreach (var monster in monsterDatabase.Monsters)
-                {
-                    if (monsters[i] == monster.Id)
-                    {
-                        targetGO = monster.PreviewGO;
-                    }
-                }
-                Vector3 directionToLook = targetLook.position - currentMonsterSlot.position;
-                directionToLook.y = 0;
-                Quaternion rotationToLook = Quaternion.LookRotation(directionToLook);
-                var go = Instantiate(targetGO, currentMonsterSlot.position, rotationToLook);
-                allMonstersGO.Add(go);
-                SaveMonsterGO(go);
-                ChooseMonsterSlot(i);
-            }
+            Vector3 directionToLook = targetLook.position - currentMonsterSlot.position;
+            directionToLook.y = 0;
+            Quaternion rotationToLook = Quaternion.LookRotation(directionToLook);
+            var go = Instantiate(monster.PreviewGO, currentMonsterSlot.position, rotationToLook);
+            allMonstersGO.Add(go);
+            SaveMonsterGO(go);
+            ChooseMonsterSlot(i);
+            i++;
         }
     }
 
@@ -174,7 +158,6 @@ public class PreparationForBattleManager : MonoBehaviour
 
     private void ChoosePetSlot(int index)
     {
-        index += 1;
         switch(index)
         {
             case 0:

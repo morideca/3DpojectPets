@@ -26,6 +26,9 @@ public class MainGUIManager : MonoBehaviour
 
     private Image currentSlot;
 
+    [SerializeField]
+    private GameObject petInventory;
+
     private void Awake()
     {
         MonsterSpace.setFirstSlot += SetFirstSlot;
@@ -33,6 +36,11 @@ public class MainGUIManager : MonoBehaviour
         MonsterSpace.setThirdSlot += SetThirdSlot;
         MonsterSpace.setFourthSlot += SetFourthSlot;
         PlayerThrowBall.setCurrentPetSlot += SetCurrentPetSlot;
+    }
+
+    private void OnEnable()
+    {
+        Render();
     }
 
     private void OnDisable()
@@ -51,7 +59,11 @@ public class MainGUIManager : MonoBehaviour
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (petInventory.activeSelf) petInventory.SetActive(false);
+            else petInventory.SetActive(true);
+        }
     }
 
     private void SetCurrentPetSlot(int number)
@@ -82,23 +94,32 @@ public class MainGUIManager : MonoBehaviour
         }
     }
 
-    private void SetFirstSlot(Monster pet)
+    private void Render()
+    {
+        if (PetSpaceData.Pets.Count > 0) petIcon1.sprite = PetSpaceData.Pets[0].Icon;
+        if (PetSpaceData.Pets.Count > 1) petIcon2.sprite = PetSpaceData.Pets[1].Icon;
+        if (PetSpaceData.Pets.Count > 2) petIcon3.sprite = PetSpaceData.Pets[2].Icon;
+        if (PetSpaceData.Pets.Count > 3) petIcon4.sprite = PetSpaceData.Pets[3].Icon;
+
+    }
+
+    private void SetFirstSlot(Pet pet)
     {
 
         petIcon1.sprite = pet.Icon;
     }
 
-    private void SetSecondSlot(Monster pet)
+    private void SetSecondSlot(Pet pet)
     {
         petIcon2.sprite = pet.Icon;
     }
 
-    private void SetThirdSlot(Monster pet)
+    private void SetThirdSlot(Pet pet)
     {
         petIcon3.sprite = pet.Icon;
     }
 
-    private void SetFourthSlot(Monster pet)
+    private void SetFourthSlot(Pet pet)
     {
         petIcon4.sprite = pet.Icon;
     }

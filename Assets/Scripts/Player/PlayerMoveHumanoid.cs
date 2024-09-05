@@ -40,19 +40,24 @@ public class PlayerMoveHumanoid : MonoBehaviour
 
     private void OnEnable()
     {
-        CameraManager.mainCharacterSwapped += StopOrStartMove;
+        CameraManager.OnMainCharacterSwapped += StopOrStartMove;
         HealthManager.petDied += StopMove;
     }
 
     private void OnDisable()
     {
-        CameraManager.mainCharacterSwapped -= StopOrStartMove;
+        CameraManager.OnMainCharacterSwapped -= StopOrStartMove;
         HealthManager.petDied -= StopMove;
     }
 
     public void Start()
     {
         animator = GetComponent<Animator>();
+        if (animator == null)
+        {
+            Debug.Log("Here is no animator component");
+            return;
+        }
         controller = GetComponent<CharacterController>();
         mainCamera = Camera.main.transform;
         jumpForce = jumpTime * gravity / 2;
@@ -118,7 +123,7 @@ public class PlayerMoveHumanoid : MonoBehaviour
         {
             if (!animator.GetBool("running")) animator.SetBool("walking", true);
 
-            if (allowRun && Input.GetKeyDown(KeyCode.LeftShift))
+            if (allowRun && Input.GetKey(KeyCode.LeftShift))
             {
                 animator.SetBool("walking", false);
                 animator.SetBool("running", true);
@@ -148,8 +153,6 @@ public class PlayerMoveHumanoid : MonoBehaviour
             if (allowRun) animator.SetBool("running", false);
         }
         if (!IsGrounded) yVelocity -= gravity * Time.deltaTime;
-        //move.y += yVelocity;
-     //   controller.Move(Vector3.down * yVelocity * Time.deltaTime);
         controller.Move(Vector3.up * yVelocity * Time.deltaTime + move * force * Time.deltaTime);
     }
 

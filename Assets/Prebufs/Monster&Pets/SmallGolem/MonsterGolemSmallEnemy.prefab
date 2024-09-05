@@ -164,7 +164,7 @@ MonoBehaviour:
   throwPoint: {fileID: 92155875014356341}
   grabPoint: {fileID: 5739065470137803597}
   rock: {fileID: 1375754531036840, guid: 67fc034588616c24e9144edd646b8aa8, type: 3}
-  distanceForAbility: 22
+  distanceForAbility: 15
 --- !u!114 &2475101350176769485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,6 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34d0aad74ac3fe74493617f6e664764b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthLevelScale: 15
   maxHealth: 100
 --- !u!114 &2156585360416244922
 MonoBehaviour:
@@ -191,6 +192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 2
+  minMaxLevel: 0500000009000000
 --- !u!114 &6975901851710236777
 MonoBehaviour:
   m_ObjectHideFlags: 0

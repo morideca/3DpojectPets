@@ -1104,7 +1104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2f30de2b7b5378469d47afd80d87967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  petsInSpaceData: {fileID: 11400000, guid: a332b091a7332884d9323bf01b7b80cb, type: 2}
+  petSpaceData: {fileID: 11400000, guid: df5aeb7f2e9ffe548abb763dbb1b8ec7, type: 2}
 --- !u!114 &4232400786223075695
 MonoBehaviour:
   m_ObjectHideFlags: 0

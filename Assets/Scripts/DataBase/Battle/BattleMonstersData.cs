@@ -7,5 +7,5 @@ using UnityEngine;
 public class BattleMonstersData : ScriptableObject
 {
 
-    public List<int> monstersID;
+    public List<Monster> monsters;
 }
