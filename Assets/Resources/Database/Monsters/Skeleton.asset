@@ -20,3 +20,4 @@ MonoBehaviour:
   goPet: {fileID: 8932495650570871541, guid: 1ebed4ac2f467674a9159ed9f2b64f96, type: 3}
   previewGO: {fileID: 2948919142752297658, guid: 7faccdf2b2e49854cbdb1b0f89c3b48b, type: 3}
   monsterType: 0
+  evolutionForm: {fileID: 11400000, guid: d35ebd596d8d7e04fb3554db09d35d66, type: 2}
