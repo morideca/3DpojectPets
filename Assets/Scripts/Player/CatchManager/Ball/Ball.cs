@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
@@ -9,15 +6,18 @@ public class Ball : MonoBehaviour
     private bool monsterIn = false;
     private int id;
 
-    public static event Action<int> pickedUpTheBall;
-
     private void Start()
     {
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnCollisionStay(Collision other)
     {
+        if (monsterIn == true && other.gameObject.CompareTag("Player"))
+        {
+            MonsterSpace.Instance.PickedUpMonster(id);
+            Destroy(gameObject);
+        }
 
         if (other.gameObject.TryGetComponent(out BaseHumanoid monster))
         {
@@ -29,12 +29,5 @@ public class Ball : MonoBehaviour
             monsterIn = true;
         }
         else if (!monsterIn) Destroy(gameObject);
-        
-        if (monsterIn == true && other.gameObject.CompareTag("Player"))
-        {
-            pickedUpTheBall?.Invoke(id);
-            Debug.Log(id);
-            Destroy(gameObject);
-        }
     }
 }

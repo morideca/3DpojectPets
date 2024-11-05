@@ -1009,10 +1009,13 @@ PrefabInstance:
       addedObject: {fileID: 7457061507932066621}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 24c9bd87e5772b341b113de0f61a3539, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 3759001978865814903}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 24c9bd87e5772b341b113de0f61a3539, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 6946789911202801354}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 24c9bd87e5772b341b113de0f61a3539, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6684075738749277112}
+      addedObject: {fileID: 7903916791986504138}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 24c9bd87e5772b341b113de0f61a3539, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6912310472320399496}
@@ -1049,6 +1052,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3759001978865814903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6279295676115609148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 330db32f2061f50429a79f27288cf161, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runSpeed: 6
+  walkSpeed: 3
+  iAmMainCharacter: 0
+  allowRun: 1
+  allowWalk: 1
 --- !u!143 &6946789911202801354
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1075,23 +1095,29 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.25, z: 0}
---- !u!114 &6684075738749277112
-MonoBehaviour:
+--- !u!136 &7903916791986504138
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6279295676115609148}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8f5c1ff5741a4546bc6d00725753377, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  runSpeed: 6
-  walkSpeed: 4
-  allowJump: 1
-  allowRun: 1
-  allowWalk: 1
+  serializedVersion: 2
+  m_Radius: 0.6
+  m_Height: 2.56
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.25, z: 0}
 --- !u!114 &6912310472320399496
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -158,7 +158,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runSpeed: 0
   walkSpeed: 1
-  allowJump: 0
+  iAmMainCharacter: 0
   allowRun: 0
   allowWalk: 1
 --- !u!114 &3198831626297463833
@@ -173,6 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34d0aad74ac3fe74493617f6e664764b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthLevelScale: 10
   maxHealth: 200
 --- !u!114 &2993077626120859084
 MonoBehaviour:
@@ -201,10 +202,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   simpleAttackPoint: {fileID: 9150278606329443359}
-  attack1Damage: 10
-  attack2Damage: 20
-  attack1CooldownTime: 5
-  attack2CooldownTime: 4
+  powerAttackPoint: {fileID: 9150278606329443359}
+  simpleAttackDamage: 5
+  powerAttackDamage: 10
+  simpleAttack1CooldownTime: 3
+  powerAttackCooldownTime: 5
   pointForRockCreate: {fileID: 839752435246705670}
   throwPoint: {fileID: 92155875014356341}
   grabPoint: {fileID: 5739065470137803597}
@@ -251,10 +253,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 2
-  m_Radius: 1.5330567
-  m_Height: 4.0323267
+  m_Radius: 2.1
+  m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0.05419016, y: 2.01611, z: 0.18107486}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!143 &4681551872484979239
 CharacterController:
   m_ObjectHideFlags: 0

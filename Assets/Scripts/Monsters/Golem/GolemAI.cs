@@ -72,7 +72,7 @@ public class GolemAI : MonsterAI
     public void ThrowRock()
     {
         rockGrabbed = false;
-        rockGO.GetComponent<Rock>().thrown = true;
+        rockGO.GetComponent<Rock>().ThrownOn();
         Vector3 directionToTarget = target.transform.position - throwPoint.transform.position;
         float distance = Vector3.Distance(target.transform.position, throwPoint.transform.position);
         float angle = Mathf.Deg2Rad * 30;

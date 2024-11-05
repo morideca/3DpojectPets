@@ -1,9 +1,7 @@
-using Cinemachine;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GolemManager : AttackManager
+public class GolemAttack : UnitAttack
 {
     [SerializeField]
     private Transform pointForRockCreate;
@@ -40,27 +38,35 @@ public class GolemManager : AttackManager
 
     public override void Update()
     {
-        Debug.Log(throwRockOnCooldown);
-        if (canAttack && playerMoveHumanoid.IsGrounded == true)
+        if (canAttack && playerHumanoidMove.IsGrounded)
+        {
+            SimpleAttackUpdate();
+            PowerAttackUpdate();
+        }
+    }
+
+    override public void PowerAttackUpdate() 
+    {
+        if (canAttack && playerHumanoidMove.IsGrounded)
         {
             if (!isAttacking && !throwRockOnCooldown)
             {
-                if (!throwRockOnCooldown && Input.GetKeyDown(KeyCode.Mouse0))
+                if (!throwRockOnCooldown && Input.GetKeyDown(keyCodePowerAttack))
                 {
                     lineRenderer.enabled = true;
-                    playerMoveHumanoid.FreezeThrowRotation();
+                    playerHumanoidMove.FreezeRotation();
                     showTrajectory = true;
                 }
 
-                if (!throwRockOnCooldown && showTrajectory && Input.GetKey(KeyCode.Mouse0))
+                if (!throwRockOnCooldown && showTrajectory && Input.GetKey(keyCodePowerAttack))
                 {
                     ShowTrajectory();
                 }
 
-                if (!throwRockOnCooldown && Input.GetKeyUp(KeyCode.Mouse0))
+                if (!throwRockOnCooldown && Input.GetKeyUp(keyCodePowerAttack))
                 {
-                    playerMoveHumanoid.UnFreezeThrowRotation();
-                    animator.SetTrigger("attack1");
+                    playerHumanoidMove.UnFreezeRotation();
+                    animator.SetTrigger(PowerAttackAnim);
                     isAttacking = true;
                     lineRenderer.enabled = false;
                     showTrajectory = false;
@@ -70,7 +76,6 @@ public class GolemManager : AttackManager
             {
                 GrabRock();
             }
-            Attack2();
         }
     }
     
@@ -85,7 +90,7 @@ public class GolemManager : AttackManager
         rockGrabbed = false;
         rockGO.GetComponent<Rigidbody>().velocity = rockTrajectory * _ballForce;
         _ballForce = ballForce;
-        rockGO.GetComponent<Rock>().thrown = true;
+        rockGO.GetComponent<Rock>().ThrownOn();
         throwRockOnCooldown = true;
         Invoke("ThorwRockCooldownOff", throwRockCooldownTime);
     }
@@ -131,7 +136,7 @@ public class GolemManager : AttackManager
 
             if (target.CompareTag("Enemy") || target.CompareTag("Monster"))
             {
-                DealDamage(attack2Damage, target);
+                DealDamage(powerAttackDamage, target);
             }
         }
     }

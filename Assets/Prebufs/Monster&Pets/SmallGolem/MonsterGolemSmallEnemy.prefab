@@ -193,6 +193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   minMaxLevel: 0500000009000000
+  monster: {fileID: 0}
 --- !u!114 &6975901851710236777
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     private CameraManager cameraManager;
     private void OnEnable()
     {
-        BallWithMonster.petSummoned += SwapCameraTarget;
+        BallWithMonster.PetSummoned += SwapCameraTarget;
         MonsterAI.monsterToutchedPlayer += BattleStarts;
         HealthManager.petDied += ReturnCameraToPlayer;
         BaseHumanoid.monsterJoinTheBattle += AddMonsterToBattle;
@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
 
     private void OnDisable()
     {
-        BallWithMonster.petSummoned -= SwapCameraTarget;
+        BallWithMonster.PetSummoned -= SwapCameraTarget;
         MonsterAI.monsterToutchedPlayer -= BattleStarts;
         HealthManager.petDied -= ReturnCameraToPlayer;
         BaseHumanoid.monsterJoinTheBattle -= AddMonsterToBattle;

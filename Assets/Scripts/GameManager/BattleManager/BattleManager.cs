@@ -58,13 +58,13 @@ public class BattleManager : MonoBehaviour
 
     private void OnEnable()
     {
-        BallWithMonster.petSummoned += SwapCameraTarget;
+        BallWithMonster.PetSummoned += SwapCameraTarget;
         HealthManager.petDied += ReturnCameraToPlayer;
     }
 
     private void OnDisable()
     {
-        BallWithMonster.petSummoned -= SwapCameraTarget;
+        BallWithMonster.PetSummoned -= SwapCameraTarget;
         HealthManager.petDied -= ReturnCameraToPlayer;
     }
 

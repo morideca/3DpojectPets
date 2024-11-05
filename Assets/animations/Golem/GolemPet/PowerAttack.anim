@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Attack01
+  m_Name: PowerAttack
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -113877,7 +113877,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 2.6666667
-    functionName: IsAttackingOff
+    functionName: AllowAttack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -1,14 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MonsterSpace : MonoBehaviour
 {
-    //[SerializeField]
-    //private BattleMonstersData petsInSpaceData;
     [SerializeField]
     private PetSpaceData petSpaceData;
 
@@ -22,25 +17,25 @@ public class MonsterSpace : MonoBehaviour
 
     private int maxSlots = 4;
 
+    public static MonsterSpace Instance;
+
     private void Start()
     {
-        GameManager.OnPetReturn += SavePetStats;
-        Ball.pickedUpTheBall += PickedUpMonster;
+        Instance = this;
         petInSlots = PetSpaceData.Pets;
     }
 
     private void OnEnable()
     {
- 
+        GameManager.OnPetReturn += SavePetStats;
     }
 
     private void OnDisable()
     {
-        Ball.pickedUpTheBall -= PickedUpMonster;
         GameManager.OnPetReturn -= SavePetStats;
     }
 
-    private void PickedUpMonster(int monsterID)
+    public void PickedUpMonster(int monsterID)
     {
         var monsters = Resources.Load<MonsterDatabase>("Database/MonsterDatabase").Monsters;
         foreach (var monster in monsters)
@@ -49,7 +44,6 @@ public class MonsterSpace : MonoBehaviour
             {
                 if (petInSlots == null || petInSlots.Count < maxSlots)
                 {
-                    Debug.Log("add");
                     var pet = new Pet(monster, 0, 1);
                     petInSlots.Add(pet);
                     if (petInSlots.Count == 1) setFirstSlot?.Invoke(pet);

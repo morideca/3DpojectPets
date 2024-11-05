@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BallWithMonster : MonoBehaviour
@@ -9,7 +7,7 @@ public class BallWithMonster : MonoBehaviour
     private Rigidbody rb;
     private bool summoned = false;
 
-    public static event Action<GameObject> petSummoned;
+    public static event Action<GameObject> PetSummoned;
 
     private void Start()
     {
@@ -19,8 +17,6 @@ public class BallWithMonster : MonoBehaviour
     public void PutMosnterIn(Pet pet)
     {
         this.pet = pet;
-        Debug.Log(this.pet.CurrentHP);
-
     }
 
     private void Update()
@@ -32,7 +28,7 @@ public class BallWithMonster : MonoBehaviour
             var healthManager = pet.GetComponent<HealthManager>();
             healthManager.SetCurrentHealth(this.pet.CurrentHP);
             healthManager.SetMaxHealth(this.pet.MaxHP);
-            petSummoned?.Invoke(pet);
+            PetSummoned?.Invoke(pet);
             Destroy(gameObject);
         }
     }

@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Rock : MonoBehaviour
@@ -12,7 +10,8 @@ public class Rock : MonoBehaviour
     private ParticleSystem effect;
     [SerializeField]
     private bool isPet;
-    public bool thrown = false;
+    private bool thrown = false;
+
     [SerializeField]
     private LayerMask layers;
     private void OnCollisionEnter(Collision collision)
@@ -31,7 +30,7 @@ public class Rock : MonoBehaviour
                 CheckForHit();
                 Destroy(gameObject);
             }
-            else if (!isPet && collision.gameObject.CompareTag("Player"))
+            else if (!isPet && collision.gameObject.CompareTag("Pet"))
             {
                 Instantiate(effect, transform.position, Quaternion.identity);
                 CheckForHit();
@@ -51,4 +50,6 @@ public class Rock : MonoBehaviour
         }
         if (hitTargets[0] != null) rockExplosed?.Invoke(hitTargets);
     }
+
+    public void ThrownOn() => thrown = true;
 }
