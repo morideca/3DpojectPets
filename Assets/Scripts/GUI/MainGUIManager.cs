@@ -7,22 +7,9 @@ using UnityEngine.UI;
 public class MainGUIManager : MonoBehaviour
 {
     [SerializeField]
-    private Image petCell1;
-    [SerializeField] 
-    private Image petCell2;
-    [SerializeField] 
-    private Image petCell3;
-    [SerializeField] 
-    private Image petCell4;
-
+    private List<Image> petCells = new List<Image>();
     [SerializeField]
-    private Image petIcon1;
-    [SerializeField]
-    private Image petIcon2;
-    [SerializeField]
-    private Image petIcon3;
-    [SerializeField]
-    private Image petIcon4;
+    private List<Image> petIcons = new List<Image>();
 
     private Image currentSlot;
 
@@ -31,10 +18,7 @@ public class MainGUIManager : MonoBehaviour
 
     private void Awake()
     {
-        MonsterSpace.setFirstSlot += SetFirstSlot;
-        MonsterSpace.setSecondSlot += SetSecondSlot;
-        MonsterSpace.setThirdSlot += SetThirdSlot;
-        MonsterSpace.setFourthSlot += SetFourthSlot;
+        MonsterSpace.setPetSlot += SetPetSlot;
         PlayerThrowBall.setCurrentPetSlot += SetCurrentPetSlot;
     }
 
@@ -45,10 +29,7 @@ public class MainGUIManager : MonoBehaviour
 
     private void OnDisable()
     {
-        MonsterSpace.setFirstSlot -= SetFirstSlot;
-        MonsterSpace.setSecondSlot -= SetSecondSlot;
-        MonsterSpace.setThirdSlot -= SetThirdSlot;
-        MonsterSpace.setFourthSlot -= SetFourthSlot;
+        MonsterSpace.setPetSlot -= SetPetSlot;
         PlayerThrowBall.setCurrentPetSlot -= SetCurrentPetSlot;
     }
 
@@ -66,61 +47,34 @@ public class MainGUIManager : MonoBehaviour
         }
     }
 
-    private void SetCurrentPetSlot(int number)
+    private void SetCurrentPetSlot(int index)
     {
         if (currentSlot != null) currentSlot.sprite = Resources.Load<Sprite>("GUI/Cell/NonSelected");
-        switch (number)
+
+        if (index == 0)
         {
-            case 0:
-                currentSlot.sprite = Resources.Load<Sprite>("GUI/Cell/NonSelected");
-                currentSlot = null;
-                break;
-            case 1:
-                currentSlot = petCell1;
-                currentSlot.sprite = Resources.Load<Sprite>("GUI/Cell/Selected");
-                break;
-            case 2:
-                currentSlot = petCell2;
-                currentSlot.sprite = Resources.Load<Sprite>("GUI/Cell/Selected");
-                break;
-            case 3:
-                currentSlot = petCell3;
-                currentSlot.sprite = Resources.Load<Sprite>("GUI/Cell/Selected");
-                break;
-            case 4:
-                currentSlot = petCell4;
-                currentSlot.sprite = Resources.Load<Sprite>("GUI/Cell/Selected");
-                break;
+            currentSlot.sprite = Resources.Load<Sprite>("GUI/Cell/NonSelected");
+            currentSlot = null;
+        }
+        else
+        {
+            currentSlot = petCells[index - 1];
+            currentSlot.sprite = Resources.Load<Sprite>("GUI/Cell/Selected");
         }
     }
 
     private void Render()
     {
-        if (PetSpaceData.Pets.Count > 0) petIcon1.sprite = PetSpaceData.Pets[0].Icon;
-        if (PetSpaceData.Pets.Count > 1) petIcon2.sprite = PetSpaceData.Pets[1].Icon;
-        if (PetSpaceData.Pets.Count > 2) petIcon3.sprite = PetSpaceData.Pets[2].Icon;
-        if (PetSpaceData.Pets.Count > 3) petIcon4.sprite = PetSpaceData.Pets[3].Icon;
-
+        int i = 0;
+        foreach (var petIcon in petIcons)
+        {
+            petIcon.sprite = PetSpaceData.Pets[i].Icon;
+            i++;
+        }
     }
 
-    private void SetFirstSlot(Pet pet)
+    private void SetPetSlot(Pet pet, int i)
     {
-
-        petIcon1.sprite = pet.Icon;
-    }
-
-    private void SetSecondSlot(Pet pet)
-    {
-        petIcon2.sprite = pet.Icon;
-    }
-
-    private void SetThirdSlot(Pet pet)
-    {
-        petIcon3.sprite = pet.Icon;
-    }
-
-    private void SetFourthSlot(Pet pet)
-    {
-        petIcon4.sprite = pet.Icon;
+        petIcons[i - 1].sprite = pet.Icon;
     }
 }

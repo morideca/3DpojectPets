@@ -11,26 +11,14 @@ public class PreparationForBattleManager : MonoBehaviour
     Transform targetLook;
 
     [SerializeField]
-    private Transform petSlot1;
+    private List<Transform> petSlots = new List<Transform>();
     [SerializeField]
-    private Transform petSlot2;
-    [SerializeField]
-    private Transform petSlot3;
-    [SerializeField]
-    private Transform petSlot4;
+    private List<Transform> monsterSlots = new List<Transform>();
+
     private Transform currentPetSlot;
 
-    [SerializeField]
-    private Transform monsterSlot1;
-    [SerializeField]
-    private Transform monsterSlot2;
-    [SerializeField]
-    private Transform monsterSlot3;
-    [SerializeField]
-    private Transform monsterSlot4;
-    [SerializeField]
-    private Transform monsterSlot5;
     private Transform currentMonsterSlot;
+
 
     private List<GameObject> monstersGO = new List<GameObject>();
     private List<GameObject> petsGO = new List<GameObject>();
@@ -63,8 +51,8 @@ public class PreparationForBattleManager : MonoBehaviour
         monsters = mostersInBattle.monsters;
         pets = PetSpaceData.Pets;
 
-        currentPetSlot = petSlot1;
-        currentMonsterSlot = monsterSlot1;
+        currentPetSlot = petSlots[0];
+        currentMonsterSlot = monsterSlots[0];
         AddPetsAndMonsters();
 
         cameraTarget = allMonstersGO[currentIndex].transform;
@@ -124,8 +112,9 @@ public class PreparationForBattleManager : MonoBehaviour
             var go = Instantiate(monster.PreviewGO, currentMonsterSlot.position, rotationToLook);
             allMonstersGO.Add(go);
             SaveMonsterGO(go);
-            ChooseMonsterSlot(i);
             i++;
+            ChooseMonsterSlot(i);
+ 
         }
     }
 
@@ -158,43 +147,11 @@ public class PreparationForBattleManager : MonoBehaviour
 
     private void ChoosePetSlot(int index)
     {
-        switch(index)
-        {
-            case 0:
-                currentPetSlot = petSlot1;
-                break;
-            case 1:
-                currentPetSlot = petSlot2;
-                break;
-            case 2:
-                currentPetSlot = petSlot3;
-                break;
-            case 3:
-                currentPetSlot = petSlot4;
-                break;
-        }
+        currentPetSlot = petSlots[index];
     }
 
     private void ChooseMonsterSlot(int index)
     {
-        index += 1;
-        switch (index)
-        {
-            case 0:
-                currentMonsterSlot = monsterSlot1;
-                break;
-            case 1:
-                currentMonsterSlot = monsterSlot2;
-                break;
-            case 2:
-                currentMonsterSlot = monsterSlot3;
-                break;
-            case 3:
-                currentMonsterSlot = monsterSlot4;
-                break;
-            case 4:
-                currentMonsterSlot = monsterSlot5;
-                break;
-        }
+        currentMonsterSlot = monsterSlots[index];
     }
 }

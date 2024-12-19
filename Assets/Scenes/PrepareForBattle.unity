@@ -1771,18 +1771,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetLook: {fileID: 630009589}
-  petSlot1: {fileID: 977086295}
-  petSlot2: {fileID: 1097349831}
-  petSlot3: {fileID: 1929375730}
-  petSlot4: {fileID: 1783184292}
-  monsterSlot1: {fileID: 207951101}
-  monsterSlot2: {fileID: 382577764}
-  monsterSlot3: {fileID: 401341477}
-  monsterSlot4: {fileID: 1565812256}
-  monsterSlot5: {fileID: 963930335}
+  petSlots:
+  - {fileID: 977086295}
+  - {fileID: 1097349831}
+  - {fileID: 1929375730}
+  - {fileID: 1783184292}
+  monsterSlots:
+  - {fileID: 207951101}
+  - {fileID: 382577764}
+  - {fileID: 401341477}
+  - {fileID: 1565812256}
+  - {fileID: 963930335}
   monsterDatabase: {fileID: 11400000, guid: db32e4e3876e6d549946727f2e31d1c2, type: 2}
   mostersInBattle: {fileID: 11400000, guid: 8efdca3a345d944459e5d6de01cccf44, type: 2}
-  petsInBattle: {fileID: 11400000, guid: a332b091a7332884d9323bf01b7b80cb, type: 2}
+  petsInBattle: {fileID: 0}
   virtualCamera: {fileID: 1301257625}
 --- !u!4 &1599539791
 Transform:

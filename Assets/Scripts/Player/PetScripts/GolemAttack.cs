@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class GolemAttack : UnitAttack
@@ -16,7 +17,7 @@ public class GolemAttack : UnitAttack
     private GameObject rock;
 
     [SerializeField]
-    private float throwRockCooldownTime = 2;
+    private int throwRockCooldownTime = 2;
     private bool throwRockOnCooldown = false;
 
     private Vector3 rockTrajectory;
@@ -79,8 +80,10 @@ public class GolemAttack : UnitAttack
         }
     }
     
-    private void ThorwRockCooldownOff()
+    private async void ThorwRockCooldownOff()
     {
+        throwRockOnCooldown = true;
+        await Task.Delay(throwRockCooldownTime * 1000);
         throwRockOnCooldown = false;
     }
 
@@ -91,15 +94,11 @@ public class GolemAttack : UnitAttack
         rockGO.GetComponent<Rigidbody>().velocity = rockTrajectory * _ballForce;
         _ballForce = ballForce;
         rockGO.GetComponent<Rock>().ThrownOn();
-        throwRockOnCooldown = true;
-        Invoke("ThorwRockCooldownOff", throwRockCooldownTime);
+        ThorwRockCooldownOff();
     }
 
-    private void GrabRock()
-    {
-        rockGO.transform.position = grabPoint.position;
-    }
-
+    private void GrabRock() => rockGO.transform.position = grabPoint.position;
+  
     private void GrabbedOn() => rockGrabbed = true;
 
     private void CreateRock()

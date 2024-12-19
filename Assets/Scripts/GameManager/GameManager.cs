@@ -1,8 +1,5 @@
-using Cinemachine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -92,7 +89,6 @@ public class GameManager : MonoBehaviour
     {
         monstersForBattle.monsters = new List<Monster>();
         battleStart?.Invoke();
-        //petsForBattle.pets = player.GetComponent<MonsterSpace>().PetInSlots;
 
         LoadPreparationScence();
     }

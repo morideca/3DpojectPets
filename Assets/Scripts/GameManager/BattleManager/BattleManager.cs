@@ -19,16 +19,9 @@ public class BattleManager : MonoBehaviour
 
     private Transform currentPetSlot;
 
-    [SerializeField]
-    private Transform monsterSlot1;
-    [SerializeField]
-    private Transform monsterSlot2;
-    [SerializeField]
-    private Transform monsterSlot3;
-    [SerializeField]
-    private Transform monsterSlot4;
-    [SerializeField]
-    private Transform monsterSlot5;
+    [SerializeField] 
+    private List<Transform> monsterSlots = new List<Transform>();
+
     private Transform currentMonsterSlot;
 
     private List<GameObject> allMonstersInBattle = new List<GameObject>();
@@ -41,7 +34,6 @@ public class BattleManager : MonoBehaviour
     private MonsterDatabase monsterDatabase;
     [SerializeField]
     private BattleMonstersData mostersInBattle;
-    [SerializeField]
     private BattleMonstersData petsInBattle;
 
     private int currentNumberOfMonsters;
@@ -73,7 +65,7 @@ public class BattleManager : MonoBehaviour
         cameraManager = GetComponent<CameraManager>();
         monsters = mostersInBattle.monsters;
         currentPetSlot = petSlot1;
-        currentMonsterSlot = monsterSlot1;
+        currentMonsterSlot = monsterSlots[0];
         AddPetsAndMonsters();
         SwapCameraTarget(currentPet);
         Debug.Log(currentMainCharacter.name);
@@ -168,24 +160,6 @@ public class BattleManager : MonoBehaviour
 
     private void ChooseMonsterSlot(int index)
     {
-
-        switch (index)
-        {
-            case 0:
-                currentMonsterSlot = monsterSlot1;
-                break;
-            case 1:
-                currentMonsterSlot = monsterSlot2;
-                break;
-            case 2:
-                currentMonsterSlot = monsterSlot3;
-                break;
-            case 3:
-                currentMonsterSlot = monsterSlot4;
-                break;
-            case 4:
-                currentMonsterSlot = monsterSlot5;
-                break;
-        }
+        currentMonsterSlot = monsterSlots[index];
     }
 }

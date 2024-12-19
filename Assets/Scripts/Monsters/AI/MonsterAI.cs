@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -33,8 +34,8 @@ public abstract class MonsterAI : MonoBehaviour
     [SerializeField]
     protected float attackRange;
 
-    protected float attackCooldownTime = 3;
-    protected float abilityCooldown = 6;
+    protected int attackCooldownTime = 3;
+    protected int abilityCooldown = 6;
     protected float abilityDamage = 40;
     protected float distanceToTarget;
 
@@ -105,7 +106,6 @@ public abstract class MonsterAI : MonoBehaviour
             goingToStartPosition = false;
         }
 
-
         if (!goingToStartPosition)
         {
             if (healthManager.IsDead) return;
@@ -174,18 +174,21 @@ public abstract class MonsterAI : MonoBehaviour
         if (!attackOnCooldown)
         {
             animator.SetTrigger("attack");
-            attackOnCooldown = true;
-            Invoke("AttackCooldownOff", attackCooldownTime);
+            AttackCooldown();
         }
     }
 
-    public void AttackCooldownOff()
+    public async void AttackCooldown()
     {
+        attackOnCooldown = true;
+        await Task.Delay(attackCooldownTime * 1000);
         attackOnCooldown = false;
     }
 
-    public void AbilityCooldownOff()
+    public async void AbilityCooldown()
     {
+        attackOnCooldown = true;
+        await Task.Delay(abilityCooldown * 1000);
         abilityOnCooldown = false;
     }
 

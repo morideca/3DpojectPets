@@ -19114,14 +19114,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bada0869815d50a4db0bc3d294f9ea22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  petCell1: {fileID: 1053091666}
-  petCell2: {fileID: 220561775}
-  petCell3: {fileID: 1026094105}
-  petCell4: {fileID: 724636748}
-  petIcon1: {fileID: 1152789407}
-  petIcon2: {fileID: 781538227}
-  petIcon3: {fileID: 1393776935}
-  petIcon4: {fileID: 1083864735}
+  petCells:
+  - {fileID: 1053091666}
+  - {fileID: 220561775}
+  - {fileID: 1026094105}
+  - {fileID: 724636748}
+  petIcons:
+  - {fileID: 1152789407}
+  - {fileID: 781538227}
+  - {fileID: 1393776935}
+  - {fileID: 1083864735}
   petInventory: {fileID: 862870421}
 --- !u!1 &1847765254
 GameObject:

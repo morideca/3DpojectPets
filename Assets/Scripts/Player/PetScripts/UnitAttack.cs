@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public abstract class UnitAttack : MonoBehaviour
@@ -19,9 +20,9 @@ public abstract class UnitAttack : MonoBehaviour
     [SerializeField]
     protected int powerAttackDamage;
     [SerializeField]
-    protected float simpleAttack1CooldownTime = 3;
+    protected int simpleAttack1CooldownTime = 3;
     [SerializeField]
-    protected float powerAttackCooldownTime = 5;
+    protected int powerAttackCooldownTime = 5;
     protected bool simpleAttackOnCooldown = false;
     protected bool powerAttackOnCooldown;
 
@@ -56,9 +57,9 @@ public abstract class UnitAttack : MonoBehaviour
     {
         if (canAttack && playerHumanoidMove.IsGrounded == true)
         {
-                SimpleAttackUpdate();
+            SimpleAttackUpdate();
 
-                PowerAttackUpdate();
+            PowerAttackUpdate();
         }
     }
 
@@ -72,10 +73,19 @@ public abstract class UnitAttack : MonoBehaviour
 
     private void AllowAttack() => isAttacking = false;
 
-    private void SimpleAttackCooldownOff() => simpleAttackOnCooldown = false;
+    private async void SimpleAttackCooldown()
+    {
+        simpleAttackOnCooldown = true;
+        await Task.Delay(simpleAttack1CooldownTime * 1000);
+        simpleAttackOnCooldown = false; 
+    }
 
-
-    private void PowerAttackCooldownOff() => powerAttackOnCooldown = false;
+    private async void PowerAttackCooldown()
+    {
+        powerAttackOnCooldown = true;
+        await Task.Delay(powerAttackCooldownTime * 1000);
+        powerAttackOnCooldown = false;
+    }
 
     private void DealSimpleDamage()
     {
@@ -111,8 +121,7 @@ public abstract class UnitAttack : MonoBehaviour
             if (Input.GetKeyDown(keyCodeSimpleAttack) && !simpleAttackOnCooldown && !isAttacking)
             {
                 animator.SetTrigger(SimpleAttackAnim);
-                simpleAttackOnCooldown = true;
-                Invoke("SimpleAttackCooldownOff", simpleAttack1CooldownTime);
+                SimpleAttackCooldown();
                 isAttacking = true;
             }
         }
@@ -125,8 +134,7 @@ public abstract class UnitAttack : MonoBehaviour
             if (Input.GetKeyDown(keyCodePowerAttack) && !powerAttackOnCooldown && !isAttacking)
             {
                 animator.SetTrigger(PowerAttackAnim);
-                powerAttackOnCooldown = true;
-                Invoke("PowerAttackCooldownOff", powerAttackCooldownTime);
+                PowerAttackCooldown();
                 isAttacking = true;
             }       
         }

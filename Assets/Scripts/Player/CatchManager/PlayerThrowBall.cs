@@ -142,45 +142,31 @@ public class PlayerThrowBall : MonoBehaviour
 
     private void ChoosePetSlotUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && monsterSpace.PetInSlots.Count > 0)
+        int i = 0;
+        if (monsterSpace.PetInSlots.Count > 0)
         {
-            if (monsterSpace.PetInSlots[0] != null)
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                typeOfBall = TypeOfBall.ballWithMonster;
-                canThrow = true;
-                currentMonsterSlot = 1;
-                setCurrentPetSlot?.Invoke(currentMonsterSlot);
+                i = 1;
             }
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2) && monsterSpace.PetInSlots.Count > 0)
-        {
-            if (monsterSpace.PetInSlots[1] != null)
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                typeOfBall = TypeOfBall.ballWithMonster;
-                canThrow = true;
-                currentMonsterSlot = 2;
-                setCurrentPetSlot?.Invoke(currentMonsterSlot);
+                i = 2;
             }
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3) && monsterSpace.PetInSlots.Count > 0)
-        {
-            if (monsterSpace.PetInSlots[2] != null)
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                typeOfBall = TypeOfBall.ballWithMonster;
-                canThrow = true;
-                currentMonsterSlot = 3;
-                setCurrentPetSlot?.Invoke(currentMonsterSlot);
+                i = 3;
             }
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4) && monsterSpace.PetInSlots.Count > 0)
-        {
-            if (monsterSpace.PetInSlots[3] != null)
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
             {
-                typeOfBall = TypeOfBall.ballWithMonster;
-                canThrow = true;
-                currentMonsterSlot = 4;
-                setCurrentPetSlot?.Invoke(currentMonsterSlot);
+                i = 4;
             }
+            else return;
+
+            typeOfBall = TypeOfBall.ballWithMonster;
+            canThrow = true;
+            currentMonsterSlot = i;
+            setCurrentPetSlot?.Invoke(currentMonsterSlot);
         }
     }
 
