@@ -111,7 +111,7 @@ public class BattleManager : MonoBehaviour
             rotationToLook = Quaternion.LookRotation(directionToLook);
             var go = Instantiate(monster.GOEnemy, currentMonsterSlot.position, rotationToLook);
             healthManager = go.GetComponent<HealthManager>();
-            healthManager.OnDeathPrivate += CheckForLastMonsters;
+            eventManager.OnEnemyDeath += CheckForLastMonsters;
             allMonstersInBattle.Add(go);
             if (i > 4) go.SetActive(false);
             ChooseMonsterSlot(i + 1);

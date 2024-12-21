@@ -2,13 +2,6 @@ using Cinemachine;
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
-
-public enum SceneType
-{
-    main,
-    prepareForBattle,
-    battle
-}
 public class CameraManager : MonoBehaviour
 {
     private ServiceLocator serviceLocator;
@@ -17,14 +10,8 @@ public class CameraManager : MonoBehaviour
     [SerializeField]
     private CinemachineFreeLook virtualCamera;
 
-    [SerializeField]
-    private  SceneType sceneType;
-
-    public static SceneType SceneType;
-
     private void Awake()
     {
-        SceneType = sceneType;
         serviceLocator = ServiceLocator.GetInstance();
         serviceLocator.SetCameraManager(this);
         eventManager = serviceLocator.EventManager;
@@ -32,7 +19,7 @@ public class CameraManager : MonoBehaviour
 
     private void Start()
     {
-        CameraFollowPlayer();
+        CameraFollowTarget(serviceLocator.CurrentMainCharacter);
     }
 
     private void OnEnable()
@@ -48,17 +35,9 @@ public class CameraManager : MonoBehaviour
 
     public void CameraFollowTarget(GameObject target)
     {
-        switch (SceneType)
-        {
-            case SceneType.main:
-            case SceneType.battle:
-                
-                break;
-        }
         var cameraTarget = CameraPoint(target);
         if (cameraTarget == null) cameraTarget = target.transform;
         CameraLookAt(cameraTarget);
-
     }
 
     public void CameraFollowPlayer()

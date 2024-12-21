@@ -2,16 +2,25 @@ using UnityEngine;
 
 public class DamageManager : MonoBehaviour
 {
+    private ServiceLocator serviceLocator;
+    private EventManager eventManager;
+
+    private void Awake()
+    {
+        serviceLocator = ServiceLocator.GetInstance();
+    }
+
     private void OnEnable()
     {
-        UnitAttack.hitTarget += DealDamage;
-        MonsterAI.monsterAttackedPet += DealDamage;
+        if (eventManager == null) eventManager = serviceLocator.EventManager;
+        eventManager.OnPlayerAttackEnemy += DealDamage;
+        eventManager.OnMonsterAttackPet += DealDamage;
     }
 
     private void OnDisable()
     {
-        UnitAttack.hitTarget -= DealDamage;
-        MonsterAI.monsterAttackedPet -= DealDamage;
+        eventManager.OnPlayerAttackEnemy -= DealDamage;
+        eventManager.OnMonsterAttackPet -= DealDamage;
     }
 
     private void DealDamage(GameObject target, int amount)

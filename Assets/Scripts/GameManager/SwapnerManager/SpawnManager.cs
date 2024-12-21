@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
@@ -22,10 +21,17 @@ public class SpawnManager : MonoBehaviour
 
     private Monster monster;
 
-    
+    private ServiceLocator serviceLocator;
+    private EventManager eventManager;
+
+    private void Awake()
+    {
+        serviceLocator = ServiceLocator.GetInstance();
+    }
 
     private void Start()
     {
+        eventManager = serviceLocator.EventManager;
         Random.InitState(System.DateTime.Now.Millisecond);
         MonsterDatabase monsterData = Resources.Load<MonsterDatabase>("Database/MonsterDatabase");
         foreach (var monster in monsterData.Monsters)
@@ -61,7 +67,7 @@ public class SpawnManager : MonoBehaviour
     {
         SetSpawnPoint(RandomPosition());
         var monster = Instantiate(this.monster.GOEnemy, spawnPoint, Quaternion.identity);
-        monster.GetComponent<HealthManager>().OnDeathPrivate += StartSpawnCooldown;
+        eventManager.OnEnemyDeath += StartSpawnCooldown;
         monster.GetComponent<BaseHumanoid>().monster = this.monster;
     }
 

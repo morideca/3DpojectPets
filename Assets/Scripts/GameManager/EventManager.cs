@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EventManager : MonoBehaviour
@@ -12,12 +10,18 @@ public class EventManager : MonoBehaviour
     public event Action<GameObject> OnPetReturnedToBall;
     public event Action<GameObject> OnPetSummoned;
     public event Action OnPetDeath;
+    public event Action OnEnemyDeath;
+    public event Action OnMonsterTouchPlayer;
+    public event Action<GameObject, int> OnMonsterAttackPet;
+    public event Action<GameObject, int> OnPlayerAttackEnemy;
+    public event Action OnBattleStart;
 
     private void Awake()
     {
         serviceLocator = ServiceLocator.GetInstance(); 
         serviceLocator.SetEventManager(this);
     }
+
 
     public void TriggerPlayerBecameMainCharacter()
     {
@@ -42,5 +46,30 @@ public class EventManager : MonoBehaviour
     public void TriggerPetDeath()
     {
         OnPetDeath?.Invoke();
+    }
+
+    public void TriggerEnemyDeath()
+    {
+        OnEnemyDeath?.Invoke();
+    }
+    
+    public void TriggerMonsterTouchPlayer()
+    {
+        OnMonsterTouchPlayer?.Invoke();
+    }
+
+    public void TriggerMonsterAttackPlayer(GameObject target, int amountOfDamage)
+    {
+        OnMonsterAttackPet?.Invoke(target, amountOfDamage);
+    }
+
+    public void TriggerPlayerAttackEnemy(GameObject target, int amountOfDamage)
+    {
+        OnPlayerAttackEnemy?.Invoke(target, amountOfDamage);
+    }
+
+    public void TriggerStartBattle()
+    {
+        OnBattleStart?.Invoke();
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,11 +15,9 @@ public class HPBarManager : MonoBehaviour
 
     private GameObject hpBar;
 
-
-
     private void OnDisable()
     {
-        healthManager.WasDamaged -= ChangeValue;
+        healthManager.OnGetDamage -= ChangeValue;
     }
 
     private void Start()
@@ -31,7 +27,7 @@ public class HPBarManager : MonoBehaviour
         int maxHealth = healthManager.MaxHealth;
         SetMaxValue(maxHealth);
         ChangeValue(maxHealth);
-        healthManager.WasDamaged += ChangeValue;
+        healthManager.OnGetDamage += ChangeValue;
     }
 
     private void InstantiateHealthBar()

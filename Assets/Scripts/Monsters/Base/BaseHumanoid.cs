@@ -19,6 +19,9 @@ public class BaseHumanoid : MonoBehaviour
 
     public Monster monster;
 
+    private ServiceLocator serviceLocator;
+    private EventManager eventManager;
+
     public int ID => id;
     public int Level => level;
 
@@ -27,26 +30,36 @@ public class BaseHumanoid : MonoBehaviour
         monster.SetLevel(level);
         monsterJoinTheBattle?.Invoke(monster);
     }
-    private void OnDisable()
-    {
-        healthManager.OnDeathPrivate -= OnDeath;
-        GameManager.battleStart -= JoinTheBattle;
-    }
+
 
     private void Awake()
     {
         level = UnityEngine.Random.Range(minMaxLevel[0], minMaxLevel[1]);
+        serviceLocator = ServiceLocator.GetInstance();
+    }
+
+    private void OnEnable()
+    {
+        if (eventManager = null) eventManager = serviceLocator.EventManager;
+        eventManager.OnEnemyDeath += OnDeath;
+    }
+
+    private void OnDisable()
+    {
+        eventManager.OnEnemyDeath -= OnDeath;
+        eventManager.OnBattleStart -= JoinTheBattle;
     }
 
     private void Start()
     {
+        eventManager = serviceLocator.EventManager;
         monsterAI = GetComponent<MonsterAI>();
         animator = GetComponent<Animator>();
         animator.SetTrigger("spawned");
         controller = GetComponent<CharacterController>();
         healthManager = GetComponent<HealthManager>();
-        healthManager.OnDeathPrivate += OnDeath;
-        GameManager.battleStart += JoinTheBattle;
+        eventManager.OnEnemyDeath += OnDeath;
+        eventManager.OnBattleStart += JoinTheBattle;
     }
     private void OnDeath()
     {

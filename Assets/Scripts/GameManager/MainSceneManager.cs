@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class MainSceneManager : MonoBehaviour
 {
     [SerializeField]
     private static SceneType sceneType;
@@ -11,30 +10,29 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private BattleMonstersData monstersForBattle;
 
-    public static event Action battleStart;
-
-    public SceneType SceneType => sceneType;
-
     private ServiceLocator serviceLocator;
+    private EventManager eventManager;
+
+    void Awake()
+    {
+        serviceLocator = ServiceLocator.GetInstance();
+        serviceLocator.SetSceneType(sceneType);
+
+    }
 
     private void OnEnable()
     {
-        MonsterAI.monsterToutchedPlayer += BattleStarts;
- 
+        if (eventManager == null) eventManager = serviceLocator.EventManager;
+        eventManager.OnMonsterTouchPlayer += BattleStarts;
         BaseHumanoid.monsterJoinTheBattle += AddMonsterToBattle;
     }
 
     private void OnDisable()
     {
-        MonsterAI.monsterToutchedPlayer -= BattleStarts;
+        eventManager.OnMonsterTouchPlayer -= BattleStarts;
         BaseHumanoid.monsterJoinTheBattle -= AddMonsterToBattle;
     }
 
-    void Awake()
-    {
-        serviceLocator = ServiceLocator.GetInstance();
-
-    }
     private void Start()
     {
         Cursor.visible = false;
@@ -44,7 +42,7 @@ public class GameManager : MonoBehaviour
     private void BattleStarts() 
     {
         monstersForBattle.monsters = new List<Monster>();
-        battleStart?.Invoke();
+        eventManager.TriggerStartBattle();
 
         LoadPreparationScence();
     }

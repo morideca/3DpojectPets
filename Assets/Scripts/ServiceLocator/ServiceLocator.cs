@@ -12,6 +12,8 @@ public class ServiceLocator
 
     public EventManager EventManager { get; private set; }
 
+    public SceneType TypeOfScene { get; private set; }
+
     private static ServiceLocator instance; 
 
     public static ServiceLocator GetInstance()
@@ -43,5 +45,10 @@ public class ServiceLocator
     public void SetEventManager(EventManager eventManager)
     {
         this.EventManager = eventManager;
+    }
+
+    public void SetSceneType(SceneType sceneType)
+    {
+        TypeOfScene = sceneType;
     }
 }

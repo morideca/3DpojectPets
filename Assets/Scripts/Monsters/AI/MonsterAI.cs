@@ -14,9 +14,6 @@ enum EnemyStates
 
 public abstract class MonsterAI : MonoBehaviour
 {
-    public static event Action monsterToutchedPlayer;
-    public static event Action<GameObject, int> monsterAttackedPet;
-
     private ServiceLocator serviceLocator;
 
     private EventManager eventManager;
@@ -73,13 +70,13 @@ public abstract class MonsterAI : MonoBehaviour
     public virtual void Start()
     {
         eventManager = serviceLocator.EventManager;
-        if (CameraManager.SceneType == SceneType.battle)
+        if (serviceLocator.TypeOfScene == SceneType.battle)
         {
             inBattle = true;
             targetIsHuman = false;
         }
         else inBattle = false;
-        if (CameraManager.SceneType == SceneType.main)
+        if (serviceLocator.TypeOfScene == SceneType.main)
         {
             inBattle = false;
         }
@@ -176,7 +173,7 @@ public abstract class MonsterAI : MonoBehaviour
 
     public void MonsterToutchedPlayer()
     {
-        monsterToutchedPlayer?.Invoke();
+        eventManager.TriggerMonsterTouchPlayer();
     }
 
     public void Attack()
@@ -204,12 +201,12 @@ public abstract class MonsterAI : MonoBehaviour
 
     public void DealDamage()
     {
-        monsterAttackedPet?.Invoke(target, attackDamage);
+        eventManager.TriggerMonsterAttackPlayer(target, attackDamage);
     }
 
     public void DealDamage(int damage, GameObject target)
     {
-        monsterAttackedPet?.Invoke(target, damage);
+        eventManager.TriggerMonsterAttackPlayer(target, damage);
     }
 
     public void CheckIfYouSeePlayer()

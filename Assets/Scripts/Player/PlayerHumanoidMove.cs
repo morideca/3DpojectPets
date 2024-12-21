@@ -69,7 +69,7 @@ public class PlayerHumanoidMove : MonoBehaviour
         mainCamera = Camera.main.transform;
         canMove = true;
 
-        if (iAmMainCharacter && CameraManager.SceneType == SceneType.battle)
+        if (iAmMainCharacter && serviceLocator.TypeOfScene == SceneType.battle)
         {
             canMove = false;
         }

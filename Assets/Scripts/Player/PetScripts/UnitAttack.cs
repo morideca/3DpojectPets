@@ -4,8 +4,6 @@ using UnityEngine;
 
 public abstract class UnitAttack : MonoBehaviour
 {
-    public static event Action<GameObject, int> hitTarget;
-
     protected Animator animator;
 
     [SerializeField]
@@ -35,18 +33,27 @@ public abstract class UnitAttack : MonoBehaviour
     protected KeyCode keyCodeSimpleAttack = KeyCode.Mouse0;
     protected KeyCode keyCodePowerAttack = KeyCode.Mouse1;
 
+    private ServiceLocator serviceLocator;
+    private EventManager eventManager;
+
+    private void Awake()
+    {
+        serviceLocator = ServiceLocator.GetInstance();
+    }
 
     public virtual void Start()
     {
+        
         animator = GetComponent<Animator>();
         TryGetComponent<PlayerHumanoidMove>(out var playerMoveHumanoid);
         this.playerHumanoidMove = playerMoveHumanoid;
     }
 
-    //private void OnEnable()
-    //{
-    //    CameraManager.OnMainCharacterSwapped += IAmMainCharacter;
-    //}
+    private void OnEnable()
+    {
+        if (eventManager == null) eventManager = serviceLocator.EventManager;
+        //    CameraManager.OnMainCharacterSwapped += IAmMainCharacter;
+    }
 
     //private void OnDisable()
     //{
@@ -111,7 +118,7 @@ public abstract class UnitAttack : MonoBehaviour
 
     public void DealDamage(int damage, GameObject target)
     {
-        hitTarget?.Invoke(target, damage);
+        eventManager.TriggerPlayerAttackEnemy(target, damage);
     }
 
     public virtual void SimpleAttackUpdate()

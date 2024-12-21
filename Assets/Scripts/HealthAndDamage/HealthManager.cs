@@ -1,16 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.ProBuilder.MeshOperations;
-using UnityEngine.UI;
 
 public class HealthManager : MonoBehaviour, IDamageable
 {
-    public event Action<int> WasDamaged;
-    public static event Action onDeath;
-    public event Action OnDeathPrivate;
+    public event Action<int> OnGetDamage;
 
     [SerializeField]
     private int healthLevelScale;
@@ -52,7 +45,7 @@ public class HealthManager : MonoBehaviour, IDamageable
             Debug.Log("my level is: " + baseHumanoid.Level);
         }
         Debug.Log("my maxHealth is: " + maxHealth);
-        WasDamaged?.Invoke(currentHealth);
+        OnGetDamage?.Invoke(currentHealth);
     }
 
     private void Init()
@@ -66,9 +59,9 @@ public class HealthManager : MonoBehaviour, IDamageable
         if (isDead == false)
         {
             if (IAmPet) eventManager.TriggerPetDeath();
+            else eventManager.TriggerEnemyDeath();
             animator.SetTrigger("die");
-            onDeath?.Invoke();
-            OnDeathPrivate?.Invoke();
+
         }
         isDead = true;
     }
@@ -77,7 +70,7 @@ public class HealthManager : MonoBehaviour, IDamageable
     {
         animator.SetTrigger("hitted");
         currentHealth -= damage;
-        WasDamaged?.Invoke(currentHealth);
+        OnGetDamage?.Invoke(currentHealth);
         if (currentHealth <= 0) Death();
     }
 
