@@ -21,7 +21,7 @@ public class HPBarManager : MonoBehaviour
 
     private void OnDisable()
     {
-        healthManager.wasDamaged -= ChangeValue;
+        healthManager.WasDamaged -= ChangeValue;
     }
 
     private void Start()
@@ -31,7 +31,7 @@ public class HPBarManager : MonoBehaviour
         int maxHealth = healthManager.MaxHealth;
         SetMaxValue(maxHealth);
         ChangeValue(maxHealth);
-        healthManager.wasDamaged += ChangeValue;
+        healthManager.WasDamaged += ChangeValue;
     }
 
     private void InstantiateHealthBar()

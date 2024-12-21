@@ -8,6 +8,9 @@ public class PlayerHumanoidMove : MonoBehaviour
 
     private Transform mainCamera;
 
+    private ServiceLocator serviceLocator;
+    private EventManager eventManager;
+
     [SerializeField]
     private float runSpeed = 6;
     [SerializeField]
@@ -38,16 +41,25 @@ public class PlayerHumanoidMove : MonoBehaviour
     private readonly int Jump = Animator.StringToHash("jumpStart");
     private readonly int Land = Animator.StringToHash("jumpLand");
 
+    private void Awake()
+    {
+        serviceLocator = ServiceLocator.GetInstance();
+        eventManager = serviceLocator.EventManager;
+    }
+
     private void OnEnable()
     {
-        CameraManager.OnMainCharacterSwapped += StopOrStartMove;
-        HealthManager.petDied += StopMove;
+        if (eventManager == null) eventManager = serviceLocator.EventManager;
+        eventManager.OnPlayerBecameMainCharacter += StartMove;
+        eventManager.OnPetBecameMainCharacter += StopMove;
+        eventManager.OnPetDeath += StopMove;
     }
 
     private void OnDisable()
     {
-        CameraManager.OnMainCharacterSwapped -= StopOrStartMove;
-        HealthManager.petDied -= StopMove;
+        eventManager.OnPlayerBecameMainCharacter -= StartMove;
+        eventManager.OnPetBecameMainCharacter -= StopMove;
+        eventManager.OnPetDeath -= StopMove;
     }
 
     public void Start()
@@ -55,6 +67,7 @@ public class PlayerHumanoidMove : MonoBehaviour
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         mainCamera = Camera.main.transform;
+        canMove = true;
 
         if (iAmMainCharacter && CameraManager.SceneType == SceneType.battle)
         {
@@ -90,15 +103,6 @@ public class PlayerHumanoidMove : MonoBehaviour
     public void StartMove()
     {
         canMove = true;
-    }
-
-    public void StopOrStartMove(GameObject target)
-    {
-        if (target == this.gameObject)
-        {
-            canMove = true;
-        }
-        else canMove = false;
     }
 
     private void UpdateMove()

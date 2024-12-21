@@ -10,6 +10,9 @@ public class PetMain : MonoBehaviour
         animator = GetComponent<Animator>();
         animator.SetTrigger("spawned");
     }
+
+
+
     void Update()
     {
         

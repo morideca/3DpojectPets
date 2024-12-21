@@ -2586,6 +2586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cbad85e3aa667643badb397e80b3fa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointForCamera: {fileID: 4949297476382575578}
 --- !u!114 &2925467385710008209
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -48,16 +48,26 @@ public class BattleManager : MonoBehaviour
     private static GameObject currentMainCharacter;
     public static GameObject CurrentMainCharacter => currentMainCharacter;
 
+    private ServiceLocator serviceLocator;
+    private EventManager eventManager;
+
+    private void Awake()
+    {
+        serviceLocator = ServiceLocator.GetInstance();
+        eventManager = serviceLocator.EventManager;
+    }
+
     private void OnEnable()
     {
-        BallWithMonster.PetSummoned += SwapCameraTarget;
-        HealthManager.petDied += ReturnCameraToPlayer;
+        if (eventManager == null) eventManager = serviceLocator.EventManager;
+        eventManager.OnPetSummoned += SwapCameraTarget;
+        //HealthManager.PetDied += ReturnCameraToPlayer;
     }
 
     private void OnDisable()
     {
-        BallWithMonster.PetSummoned -= SwapCameraTarget;
-        HealthManager.petDied -= ReturnCameraToPlayer;
+        eventManager.OnPetSummoned -= SwapCameraTarget;
+        //HealthManager.PetDied -= ReturnCameraToPlayer;
     }
 
     void Start()
@@ -101,7 +111,7 @@ public class BattleManager : MonoBehaviour
             rotationToLook = Quaternion.LookRotation(directionToLook);
             var go = Instantiate(monster.GOEnemy, currentMonsterSlot.position, rotationToLook);
             healthManager = go.GetComponent<HealthManager>();
-            healthManager.onDeathPrivate += CheckForLastMonsters;
+            healthManager.OnDeathPrivate += CheckForLastMonsters;
             allMonstersInBattle.Add(go);
             if (i > 4) go.SetActive(false);
             ChooseMonsterSlot(i + 1);
@@ -148,14 +158,14 @@ public class BattleManager : MonoBehaviour
 
     private void SwapCameraTarget(GameObject target)
     {
-        cameraManager.SwapCameraTargetMain(target);
+        cameraManager.CameraFollowTarget(target);
         currentMainCharacter = target;
     }
     private void ReturnCameraToPlayer()
     {
         if (currentMainCharacter != player) Destroy(currentMainCharacter.gameObject);
         currentMainCharacter = player;
-        cameraManager.ReturnCameraToPlayer(player, true);
+        cameraManager.CameraFollowPlayer();
     }
 
     private void ChooseMonsterSlot(int index)

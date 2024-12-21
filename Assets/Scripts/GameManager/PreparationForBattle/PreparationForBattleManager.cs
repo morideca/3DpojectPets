@@ -57,7 +57,7 @@ public class PreparationForBattleManager : MonoBehaviour
 
         cameraTarget = allMonstersGO[currentIndex].transform;
 
-        cameraManager.SwapCameraTargetMain(allMonstersGO[0]);
+        cameraManager.CameraFollowTarget(allMonstersGO[0]);
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -131,7 +131,7 @@ public class PreparationForBattleManager : MonoBehaviour
             currentIndex += 1;
             if (currentIndex > maxIndex) currentIndex = 0;
         }
-        cameraManager.SwapCameraTargetMain(allMonstersGO[currentIndex]);
+        cameraManager.CameraFollowTarget(allMonstersGO[currentIndex]);
     }
 
     private void SaveMonsterGO(GameObject monster)

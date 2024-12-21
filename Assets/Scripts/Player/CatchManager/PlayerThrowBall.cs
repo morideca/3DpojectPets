@@ -20,6 +20,9 @@ public class PlayerThrowBall : MonoBehaviour
     private MonsterSpace monsterSpace;
     private PlayerHumanoidMove mainCharacterMove;
 
+    private ServiceLocator serviceLocator;
+    private EventManager eventManager;
+
     [SerializeField]
     private GameObject ball;
     [SerializeField]
@@ -32,7 +35,6 @@ public class PlayerThrowBall : MonoBehaviour
     private CinemachineFreeLook virtualCamera;
     private GameObject mainCamera;
 
-    private bool iAmMainCharacter = true;
     private bool canThrow = true;
 
     private static int currentMonsterSlot = 1;
@@ -43,14 +45,22 @@ public class PlayerThrowBall : MonoBehaviour
 
     private TypeOfBall typeOfBall;
 
+    private void Awake()
+    {
+        serviceLocator = ServiceLocator.GetInstance();
+        eventManager = serviceLocator.EventManager;
+    }
     private void OnEnable()
     {
-        CameraManager.OnMainCharacterSwapped += CheckMainCharacter;
+        if (eventManager == null) eventManager = serviceLocator.EventManager;
+        eventManager.OnPlayerBecameMainCharacter += AllowThrow;
+        eventManager.OnPetBecameMainCharacter += BanThrow;
     }
 
     private void OnDisable()
     {
-        CameraManager.OnMainCharacterSwapped -= CheckMainCharacter;
+        eventManager.OnPlayerBecameMainCharacter -= AllowThrow;
+        eventManager.OnPetBecameMainCharacter -= BanThrow;
     }
 
     private void Start()
@@ -62,14 +72,9 @@ public class PlayerThrowBall : MonoBehaviour
         monsterSpace = GetComponent<MonsterSpace>();
     }
 
-    private void CheckMainCharacter(GameObject target)
-    {
-        if (target == this.gameObject)
-        {
-            iAmMainCharacter = true;
-        }
-        else iAmMainCharacter = false;
-    }
+    private void AllowThrow() => canThrow = true;
+
+    private void BanThrow() => canThrow = false;
 
     private void ThrowBall()
     {
@@ -172,11 +177,8 @@ public class PlayerThrowBall : MonoBehaviour
 
     private void Update()
     {
-        if (iAmMainCharacter)
-        {
-            ThrowBallUpdate();
-            ChooseSimpleBallUpdate();
-            ChoosePetSlotUpdate();
-        }
+        ThrowBallUpdate();
+        ChooseSimpleBallUpdate();
+        ChoosePetSlotUpdate();
     }
 }

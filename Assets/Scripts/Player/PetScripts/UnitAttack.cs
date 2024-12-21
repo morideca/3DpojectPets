@@ -43,15 +43,15 @@ public abstract class UnitAttack : MonoBehaviour
         this.playerHumanoidMove = playerMoveHumanoid;
     }
 
-    private void OnEnable()
-    {
-        CameraManager.OnMainCharacterSwapped += IAmMainCharacter;
-    }
+    //private void OnEnable()
+    //{
+    //    CameraManager.OnMainCharacterSwapped += IAmMainCharacter;
+    //}
 
-    private void OnDisable()
-    {
-        CameraManager.OnMainCharacterSwapped -= IAmMainCharacter;
-    }
+    //private void OnDisable()
+    //{
+    //    CameraManager.OnMainCharacterSwapped -= IAmMainCharacter;
+    //}
 
     virtual public void Update()
     {
@@ -63,11 +63,11 @@ public abstract class UnitAttack : MonoBehaviour
         }
     }
 
-    private void IAmMainCharacter(GameObject target)
-    {
-        if (target == gameObject) canAttack = true;
-        else canAttack = false;
-    }
+    //private void IAmMainCharacter(GameObject target)
+    //{
+    //    if (target == gameObject) canAttack = true;
+    //    else canAttack = false;
+    //}
 
     private void prohibitAttack() => isAttacking = true;
 

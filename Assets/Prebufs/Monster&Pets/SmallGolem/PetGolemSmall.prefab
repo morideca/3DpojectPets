@@ -108,6 +108,7 @@ GameObject:
   - component: {fileID: 6977175822551196039}
   - component: {fileID: 2431604194732493038}
   - component: {fileID: 3198831626297463833}
+  - component: {fileID: 3329344107214848347}
   - component: {fileID: 2993077626120859084}
   - component: {fileID: 1619104067840562968}
   - component: {fileID: 4219486182479935772}
@@ -175,6 +176,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthLevelScale: 10
   maxHealth: 200
+--- !u!114 &3329344107214848347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2270680805747297492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cbad85e3aa667643badb397e80b3fa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointForCamera: {fileID: 3431703532468885584}
 --- !u!114 &2993077626120859084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,6 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cbad85e3aa667643badb397e80b3fa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointForCamera: {fileID: 0}
 --- !u!1 &2317777606109206345
 GameObject:
   m_ObjectHideFlags: 0

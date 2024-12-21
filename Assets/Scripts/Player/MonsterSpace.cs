@@ -16,6 +16,16 @@ public class MonsterSpace : MonoBehaviour
 
     public static MonsterSpace Instance;
 
+    private ServiceLocator serviceLocator;
+    private EventManager eventManager;
+
+
+    private void Awake()
+    {
+        serviceLocator = ServiceLocator.GetInstance();
+        eventManager = serviceLocator.EventManager;
+    }
+
     private void Start()
     {
         Instance = this;
@@ -24,12 +34,13 @@ public class MonsterSpace : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.OnPetReturn += SavePetStats;
+        if (eventManager == null) eventManager = serviceLocator.EventManager;
+        eventManager.OnPetReturnedToBall += SavePetStats;
     }
 
     private void OnDisable()
     {
-        GameManager.OnPetReturn -= SavePetStats;
+        eventManager.OnPetReturnedToBall -= SavePetStats;
     }
 
     public void PickedUpMonster(int monsterID)

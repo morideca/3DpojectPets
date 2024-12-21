@@ -8,11 +8,10 @@ using UnityEngine.UI;
 
 public class HealthManager : MonoBehaviour, IDamageable
 {
-    public event Action<int> wasDamaged;
-    public static event Action petDied;
-
+    public event Action<int> WasDamaged;
     public static event Action onDeath;
-    public event Action onDeathPrivate;
+    public event Action OnDeathPrivate;
+
     [SerializeField]
     private int healthLevelScale;
     [SerializeField]
@@ -29,12 +28,22 @@ public class HealthManager : MonoBehaviour, IDamageable
 
     private Animator animator;
 
+    private Pet pet;
+
+    private ServiceLocator serviceLocator;
+    private EventManager eventManager;
+
+    private void Awake()
+    {
+        serviceLocator = ServiceLocator.GetInstance();
+    }
+
     void Start()
     {
+        eventManager = serviceLocator.EventManager;
         animator = GetComponent<Animator>();
-        if (GameManager.CurrentMainCharacter != null && GameManager.CurrentMainCharacter == this.gameObject) IAmPet = true;
+        if (serviceLocator.CurrentMainCharacter != null && serviceLocator.CurrentMainCharacter == this.gameObject) IAmPet = true;
         else if (BattleManager.CurrentMainCharacter != null && BattleManager.CurrentMainCharacter == this.gameObject) IAmPet = true;
-
         if (!IAmPet)
         {
             var baseHumanoid = GetComponent<BaseHumanoid>();
@@ -43,22 +52,23 @@ public class HealthManager : MonoBehaviour, IDamageable
             Debug.Log("my level is: " + baseHumanoid.Level);
         }
         Debug.Log("my maxHealth is: " + maxHealth);
-        wasDamaged?.Invoke(currentHealth);
+        WasDamaged?.Invoke(currentHealth);
     }
 
-    void Update()
+    private void Init()
     {
-
+        SetCurrentHealth(pet.CurrentHP);
+        SetMaxHealth(pet.MaxHP);
     }
 
     public void Death()
     {
         if (isDead == false)
         {
-            if (IAmPet) petDied?.Invoke();
+            if (IAmPet) eventManager.TriggerPetDeath();
             animator.SetTrigger("die");
             onDeath?.Invoke();
-            onDeathPrivate?.Invoke();
+            OnDeathPrivate?.Invoke();
         }
         isDead = true;
     }
@@ -67,7 +77,7 @@ public class HealthManager : MonoBehaviour, IDamageable
     {
         animator.SetTrigger("hitted");
         currentHealth -= damage;
-        wasDamaged?.Invoke(currentHealth);
+        WasDamaged?.Invoke(currentHealth);
         if (currentHealth <= 0) Death();
     }
 
@@ -79,6 +89,12 @@ public class HealthManager : MonoBehaviour, IDamageable
     public void SetMaxHealth(int value)
     {
         maxHealth = value;
+    }
+
+    public void SetPetClass(Pet pet)
+    {
+        this.pet = pet;
+        Init();
     }
 
     public void GetHealth(int amount)

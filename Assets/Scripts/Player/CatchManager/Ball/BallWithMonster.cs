@@ -5,13 +5,24 @@ public class BallWithMonster : MonoBehaviour
 {
     private Pet pet;
     private Rigidbody rb;
-    private bool summoned = false;
+    private ServiceLocator serviceLocator;
+    private EventManager eventManager;
 
-    public static event Action<GameObject> PetSummoned;
+    private bool released = false;
+
+    private void Awake()
+    {
+        serviceLocator = ServiceLocator.GetInstance();
+    }
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        eventManager = serviceLocator.EventManager; 
+    }
+    private void Update()
+    {
+        ReleasePetUpdate();
     }
 
     public void PutMosnterIn(Pet pet)
@@ -19,16 +30,16 @@ public class BallWithMonster : MonoBehaviour
         this.pet = pet;
     }
 
-    private void Update()
+    private void ReleasePetUpdate()
     {
-        if (rb.velocity.magnitude <= 0.5 && summoned == false)
+        if (rb.velocity.magnitude <= 0.5 && !released)
         {
-            summoned = true;
+            released = true;
             var pet = Instantiate(this.pet.GOPet, transform.position, Quaternion.identity);
             var healthManager = pet.GetComponent<HealthManager>();
-            healthManager.SetCurrentHealth(this.pet.CurrentHP);
-            healthManager.SetMaxHealth(this.pet.MaxHP);
-            PetSummoned?.Invoke(pet);
+            healthManager.SetPetClass(this.pet);
+            eventManager.TriggerPetSummoned(pet);
+            serviceLocator.SetPet(pet);
             Destroy(gameObject);
         }
     }

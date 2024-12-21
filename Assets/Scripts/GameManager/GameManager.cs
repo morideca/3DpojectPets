@@ -5,84 +5,40 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static event Action<GameObject> OnPetReturn;
-
     [SerializeField]
     private static SceneType sceneType;
-    [SerializeField]
-    private GameObject playerGO;
-    [SerializeField]
-    private Transform playerSwapn;
+
     [SerializeField]
     private BattleMonstersData monstersForBattle;
-    [SerializeField]
-    private BattlePetData petsForBattle;
-
 
     public static event Action battleStart;
 
-    private static GameObject player;
-    private static GameObject currentMainCharacter;
-    private static GameObject currentCameraTarget;
+    public SceneType SceneType => sceneType;
 
-    public static GameObject CurrentMainCharacter => currentMainCharacter;
-    public static GameObject Player => player;
-    public static GameObject CurrentCameraTarget => currentCameraTarget;
-    public static SceneType SceneType => sceneType;
+    private ServiceLocator serviceLocator;
 
-    private CameraManager cameraManager;
     private void OnEnable()
     {
-        BallWithMonster.PetSummoned += SwapCameraTarget;
         MonsterAI.monsterToutchedPlayer += BattleStarts;
-        HealthManager.petDied += ReturnCameraToPlayer;
+ 
         BaseHumanoid.monsterJoinTheBattle += AddMonsterToBattle;
     }
 
     private void OnDisable()
     {
-        BallWithMonster.PetSummoned -= SwapCameraTarget;
         MonsterAI.monsterToutchedPlayer -= BattleStarts;
-        HealthManager.petDied -= ReturnCameraToPlayer;
         BaseHumanoid.monsterJoinTheBattle -= AddMonsterToBattle;
     }
 
     void Awake()
     {
-        cameraManager = GetComponent<CameraManager>();
+        serviceLocator = ServiceLocator.GetInstance();
 
-        player = Instantiate(playerGO, playerSwapn.position, Quaternion.identity);
-        currentMainCharacter = player;
-
-        cameraManager.ReturnCameraToPlayer(player, true);
-
+    }
+    private void Start()
+    {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            ReturnCameraToPlayer();
-        }
-    }
-
-    private void SwapCameraTarget(GameObject target)
-    {
-        cameraManager.SwapCameraTargetMain(target);
-        currentMainCharacter = target;
-    }
-
-    private void ReturnCameraToPlayer()
-    {
-        if (currentMainCharacter != player)
-        {
-            OnPetReturn?.Invoke(currentMainCharacter);
-            Destroy(currentMainCharacter.gameObject);
-        }
-        currentMainCharacter = player;
-        cameraManager.ReturnCameraToPlayer(player, false);
     }
 
     private void BattleStarts() 

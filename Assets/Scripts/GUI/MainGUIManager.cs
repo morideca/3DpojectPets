@@ -66,10 +66,13 @@ public class MainGUIManager : MonoBehaviour
     private void Render()
     {
         int i = 0;
-        foreach (var petIcon in petIcons)
+        if (PetSpaceData.Pets.Count > 0)
         {
-            petIcon.sprite = PetSpaceData.Pets[i].Icon;
-            i++;
+            foreach (var petIcon in petIcons)
+            {
+                petIcon.sprite = PetSpaceData.Pets[i].Icon;
+                i++;
+            }
         }
     }
 

@@ -61,7 +61,7 @@ public class SpawnManager : MonoBehaviour
     {
         SetSpawnPoint(RandomPosition());
         var monster = Instantiate(this.monster.GOEnemy, spawnPoint, Quaternion.identity);
-        monster.GetComponent<HealthManager>().onDeathPrivate += StartSpawnCooldown;
+        monster.GetComponent<HealthManager>().OnDeathPrivate += StartSpawnCooldown;
         monster.GetComponent<BaseHumanoid>().monster = this.monster;
     }
 

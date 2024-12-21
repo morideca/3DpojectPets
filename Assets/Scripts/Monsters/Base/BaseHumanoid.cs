@@ -29,7 +29,7 @@ public class BaseHumanoid : MonoBehaviour
     }
     private void OnDisable()
     {
-        healthManager.onDeathPrivate -= OnDeath;
+        healthManager.OnDeathPrivate -= OnDeath;
         GameManager.battleStart -= JoinTheBattle;
     }
 
@@ -45,7 +45,7 @@ public class BaseHumanoid : MonoBehaviour
         animator.SetTrigger("spawned");
         controller = GetComponent<CharacterController>();
         healthManager = GetComponent<HealthManager>();
-        healthManager.onDeathPrivate += OnDeath;
+        healthManager.OnDeathPrivate += OnDeath;
         GameManager.battleStart += JoinTheBattle;
     }
     private void OnDeath()

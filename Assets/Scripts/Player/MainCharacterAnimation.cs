@@ -4,9 +4,18 @@ public class MainCharacterAnimation: MonoBehaviour
 {
     private Animator animator;
 
+    private ServiceLocator serviceLocator;
+    private EventManager eventManager;
+
     private readonly int SitDown = Animator.StringToHash("sitDown");
     private readonly int StandUp = Animator.StringToHash("standUp");
     private readonly int Cheer = Animator.StringToHash("cheer");
+
+    private void Awake()
+    {
+        serviceLocator = ServiceLocator.GetInstance();
+        eventManager = serviceLocator.EventManager;
+    }
 
     private void Start()
     {
@@ -15,16 +24,17 @@ public class MainCharacterAnimation: MonoBehaviour
 
     private void OnEnable()
     {
-        CameraManager.OnPlayerIsMainCharacter += Stand;
-        CameraManager.OnPlayerIsNotMainCharacter += Sit;
+        if (eventManager == null) eventManager = serviceLocator.EventManager;
+        eventManager.OnPlayerBecameMainCharacter += Stand;
+        eventManager.OnPetBecameMainCharacter += Sit;
         BattleManager.winBattle += WinBattle;
         BattleManager.loseBattle += LoseBattle;
     }
 
     private void OnDisable()
     {
-        CameraManager.OnPlayerIsMainCharacter -= Stand;
-        CameraManager.OnPlayerIsNotMainCharacter -= Sit;
+        eventManager.OnPlayerBecameMainCharacter -= Stand;
+        eventManager.OnPetBecameMainCharacter -= Sit;
         BattleManager.winBattle -= WinBattle;
         BattleManager.loseBattle -= LoseBattle;
     }

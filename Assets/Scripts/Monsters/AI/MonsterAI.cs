@@ -17,6 +17,10 @@ public abstract class MonsterAI : MonoBehaviour
     public static event Action monsterToutchedPlayer;
     public static event Action<GameObject, int> monsterAttackedPet;
 
+    private ServiceLocator serviceLocator;
+
+    private EventManager eventManager;
+
     protected HealthManager healthManager;
     protected GameObject target;
     protected GameObject player;
@@ -61,8 +65,14 @@ public abstract class MonsterAI : MonoBehaviour
 
     private const string running = "running";
 
+    private void Awake()
+    {
+        serviceLocator = ServiceLocator.GetInstance();
+    }
+
     public virtual void Start()
     {
+        eventManager = serviceLocator.EventManager;
         if (CameraManager.SceneType == SceneType.battle)
         {
             inBattle = true;
@@ -74,27 +84,27 @@ public abstract class MonsterAI : MonoBehaviour
             inBattle = false;
         }
 
-        target = CameraManager.cameraTarget.transform.root.gameObject;
-        if (target == null) target = CameraManager.cameraTarget;
+        target = serviceLocator.CurrentMainCharacter;
+        Debug.Log(target);
         animator = GetComponent<Animator>();
         healthManager = GetComponent<HealthManager>();
         meshAgent = GetComponent<NavMeshAgent>();
 
-        CameraManager.OnMainCharacterSwapped += ChangeTarget;
-        CameraManager.OnPlayerIsMainCharacter += TargetIsHuman;
-        CameraManager.OnPlayerIsNotMainCharacter += TargetIsNotHuman;
+
     }
 
     private void OnEnable()
     {
+        if (eventManager == null) eventManager = serviceLocator.EventManager;
         pointWhereStartedAgr = transform.position;
+        eventManager.OnPlayerBecameMainCharacter += SetTargetPlayer;
+        eventManager.OnPetBecameMainCharacter += SetTargetPet;
     }
 
     public virtual void OnDisable()
     {
-        CameraManager.OnMainCharacterSwapped -= ChangeTarget;
-        CameraManager.OnPlayerIsMainCharacter -= TargetIsHuman;
-        CameraManager.OnPlayerIsNotMainCharacter -= TargetIsNotHuman;
+        eventManager.OnPlayerBecameMainCharacter -= SetTargetPlayer;
+        eventManager.OnPetBecameMainCharacter -= SetTargetPet;
     }
 
     public virtual void Update()
@@ -202,11 +212,6 @@ public abstract class MonsterAI : MonoBehaviour
         monsterAttackedPet?.Invoke(target, damage);
     }
 
-    public void ChangeTarget(GameObject target)
-    {
-        this.target = target;
-    }
-
     public void CheckIfYouSeePlayer()
     {
         Vector3 targetPos = target.transform.position + addHeight;
@@ -263,13 +268,15 @@ public abstract class MonsterAI : MonoBehaviour
         animating = false;
     }
 
-    public void TargetIsHuman()
+    public void SetTargetPlayer()
     {
         targetIsHuman = true;
+        this.target = serviceLocator.Player;
     }
 
-    public void TargetIsNotHuman()
+    public void SetTargetPet()
     {
         targetIsHuman = false;
+        this.target = serviceLocator.CurrentMainCharacter;
     }
 }
